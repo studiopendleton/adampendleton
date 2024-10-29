@@ -8,7 +8,7 @@ date_default_timezone_set('America/New_York');
  * All config options: https://getkirby.com/docs/reference/system/options
  */
 return [
-    'debug' => true,
+    'debug' => false,
     'smartypants' => true,
     'panel' =>[
         'install' => true
