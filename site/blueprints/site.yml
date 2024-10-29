@@ -1,0 +1,111 @@
+title: Site
+
+columns:
+  - width: 1/2
+    sections:
+      homepageText:
+        type: fields
+        fields: 
+          mainText:
+            type: blocks
+            label: Main text
+            fieldsets:
+              - text
+              - list
+              - image
+          frameHeight:
+            type: range
+            label: Minimum paragraph frame height
+            help: Changes the space between blocks of text.
+            min: 50
+            max: 200
+            step: 1
+            default: 100
+            after: 'vh'
+          footerText:
+            type: textarea
+            size: small
+            label: Footer text
+
+
+      pages:
+        headline: Pages
+        image: false
+        type: pages
+        create: true
+
+  - width: 1/2
+    sections:
+      bgImages:
+        type: fields
+        fields:
+          desktopBackgroundImage:
+            type: files
+            max: 1
+            template: desktop-bg
+            label: Desktop background image
+            help: "{{ site.desktopBackgroundImage.toFile.niceSize }}"
+          mobileBackgroundImage:
+            type: files
+            max: 1
+            template: mobile-bg
+            label: Mobile background image
+            help: "{{ site.mobileBackgroundImage.toFile.niceSize }}"
+          backgroundPosition:
+            type: radio
+            label: Background image position
+            options:
+              top: Top
+              center: Center
+              bottom: Bottom
+      files:
+        info: "{{ file.niceSize }}"
+      appearance:
+        type: fields
+        fields:
+          bodyTextColor:
+            width: 1/2
+            label: Body text color
+            type: colors
+            help: Also controls link hover highlight color.
+          backgroundColor:
+            width: 1/2
+            label: Background color
+            type: colors
+            help: Also controls link hover text color.
+          font:
+            label: Font
+            type: select
+            options:
+              Univers: Univers
+              Unica: Unica
+              UnicaMedium: Unica Medium
+              Grotesque: Grotesque
+              Grotesque-Bold: Grotesque-Bold
+              Grotesque-Bold-Extended: Grotesque-Bold-Extended
+              Folio: Folio
+              Gerstner: Gerstner
+          fontSize:
+            width: 1/2
+            label: Font size (desktop)
+            type: select
+            options:
+              2.5rem: 37.5pt
+              3rem: 48pt
+              3.5rem: 56pt
+              4rem: 64pt
+          mobileFontSize:
+            width: 1/2
+            label: Font size (mobile)
+            type: select
+            options:
+              0.25: 12pt
+              0.33: 16pt
+              0.5: 24pt
+              0.66: 32pt
+          blend:
+            width: 1/1
+            type: toggle
+            label: Blend text
+
+          

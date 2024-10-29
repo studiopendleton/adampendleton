@@ -1,0 +1,36 @@
+title: Video
+icon: video
+
+options:
+  duplicate: false
+
+tabs:
+  main:
+    label: Main
+    icon: video
+    sections:
+      fields:
+        fields:
+          files:
+            label: Video file
+            max: 1
+            uploads: video
+          autoplay:
+            width: 1/6
+            label: Autoplay
+            type: toggle
+          loop:
+            width: 1/6
+            label: Loop
+            type: toggle
+  uploads:
+    label: Uploads
+    icon: file-image
+    sections:
+      image_uploads:
+        type: files
+        headline: Video uploads
+        layout: list
+        template: video
+        limit: 25
+        info: "{{ file.caption }}"

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="128" style="-webkit-transform: translate3d(0,0,0);">
+  <rect fill="white" width="60" height="1.2em" shape-rendering="geometricPrecision" />
+  <text x="2" y="16" text-rendering="optimizeLegibility" style="font-family: Arial, sans-serif; font-size: 1rem;">
+    Next →
+  </text>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">
+  <rect fill="white" width="90" height="1.1em" />
+  <text x="4" y="15" text-rendering="optimizeLegibility" style="font-family: Arial, sans-serif; font-size:1rem; text-align:center;">
+    ← Previous
+  </text>
+</svg>

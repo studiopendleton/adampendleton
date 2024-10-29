@@ -1,0 +1,16 @@
+<?php
+
+Kirby::plugin('your/plugin', [
+  'tags' => [
+    'shopify-buy-button' => [
+      'attr' => [
+        'id'
+      ],
+      'html' => function($tag) {
+
+        return '<div id="product-component-' . $tag->id . '"><script type="text/javascript">!function(){function o(){var o=ShopifyBuy.buildClient({domain:"checkout.adampendleton.net",storefrontAccessToken:"b10bd7175b20ce9444f4b345fc284044"});ShopifyBuy.UI.onReady(o).then(function(o){o.createComponent("product",{id:"6195568148678",node:document.getElementById("product-component-' . $tag->id . '"),moneyFormat:"%24%7B%7Bamount%7D%7D",options:{product:{styles:{product:{"@media (min-width: 601px)":{"max-width":"calc(25% - 20px)",margin:"0"},"text-align":"left"},button:{"font-family":"Arial, sans-serif","text-decoration":"underline","letter-spacing":"0","-webkit-font-smoothing":"auto","font-weight":"normal","font-size":"16px",padding:"0","margin-top":"-20px !important",color:"#000000",":hover":{color:"#000000","background-color":"transparent","text-decoration":"none"},"background-color":"transparent",":focus":{"background-color":"transparent","text-decoration":"none"},"border-radius":"0px",padding:"0"},quantityInput:{"font-size":"16px","padding-top":"0","padding-bottom":"0"}},buttonDestination:"checkout",contents:{img:!1,title:!1,price:!1},text:{button:"Purchase"}},productSet:{styles:{products:{"@media (min-width: 601px)":{"margin-left":"-0px"}}}},modalProduct:{contents:{img:!1,imgWithCarousel:!0,button:!1,buttonWithQuantity:!0},styles:{product:{"@media (min-width: 601px)":{"max-width":"100%","margin-left":"0px","margin-bottom":"0px"}},button:{"font-family":"Arial, sans-serif","letter-spacing":"0","-webkit-font-smoothing":"auto","font-weight":"normal","text-decoration":"underline","font-size":"16px","padding-top":"0","padding-bottom":"0",color:"#000000",":hover":{color:"#000000","background-color":"#000000","text-decoration":"none"},"background-color":"transparent",":focus":{"background-color":"transparent","text-decoration":"none"},"border-radius":"0px","padding-left":"0","padding-right":"0"},quantityInput:{"font-size":"16px","padding-top":"0","padding-bottom":"0"}},text:{button:"Add to cart"}},cart:{styles:{button:{"font-family":"Arial, sans-serif","letter-spacing":"0","-webkit-font-smoothing":"auto","font-weight":"normal","text-decoration":"underline","font-size":"16px","padding-top":"0","padding-bottom":"0",color:"#000000",":hover":{color:"#000000","background-color":"transparent","text-decoration":"none"},"background-color":"transparent",":focus":{"background-color":"#000000","text-decoration":"none"},"border-radius":"0px"}},text:{total:"Subtotal",button:"Checkout"},popup:!1},toggle:{styles:{toggle:{"font-weight":"normal","background-color":"transparent",":hover":{"background-color":"transparent","text-decoration":"none"},":focus":{"background-color":"transparent","text-decoration":"none"}},count:{"font-size":"16px",color:"#000000",":hover":{color:"#000000","text-decoration":"none"}},iconPath:{fill:"#000000"}}}}})})}window.ShopifyBuy&&window.ShopifyBuy.UI?o():function(){var t=document.createElement("script");t.async=!0,t.src="https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t),t.onload=o}()}();</script>';
+
+      }
+    ]
+  ]
+]);

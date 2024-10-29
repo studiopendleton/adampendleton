@@ -1,0 +1,63 @@
+@font-face {
+    font-family: 'Univers';
+    src: url('Univers\ Next\ Pro\ Medium.ttf') format('truetype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Unica';
+    src: url('Unica77LL-Regular.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'UnicaMedium';
+    src: url('Unica77LL-Medium.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+@font-face {
+    font-family: 'Lars';
+    src: url('Lars-Medium.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Grotesque';
+    src: url('GrotesqueMT.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Grotesque-Bold';
+    src: url('GrotesqueMTStd-Bold.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Grotesque-Bold-Extended';
+    src: url('GrotesqueMTStd-BoldExtended.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Folio';
+    src: url('FolioStd-Medium.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Gerstner';
+    src: url('GerstnerProgrammFSL-Medium.otf') format('opentype');
+    font-style: normal;
+    font-weight: normal;
+}

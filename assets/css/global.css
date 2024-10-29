@@ -1,0 +1,146 @@
+/* CSS VARIABLES */
+:root {
+  --margin: 1.5rem;
+  --font-family: 'Arial', sans-serif;
+}
+
+/* RESET/GLOBAL */
+*,
+*:after,
+*:before{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--body-color);
+  color: var(--background-color);
+  opacity: 100;
+}
+
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  line-height: 1.2;
+  color: var(--body-color);
+  background-image: var(--background-image);
+  background-position: var(--background-position);
+  /*background-position-x: var(--background-focus-x);*/
+  /*background-position-y: var(--background-focus-y);*/
+  background-repeat:no-repeat;
+  background-size: cover;
+}
+
+ 
+header {
+  position: sticky;
+  top: 0;
+  margin: var(--margin);
+  mix-blend-mode: var(--blend);
+}
+
+main {
+/*  padding-top: calc(50vh - (2 * var(--margin)));  when header is fixed */
+  min-height: min-content !important;
+  padding: var(--margin);
+}
+
+footer {
+  height: calc(100vh - 2 * var(--margin));
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  padding: var(--margin);
+  mix-blend-mode: var(--blend);
+}
+
+a {
+  color: currentColor;
+  text-decoration: none;
+  padding: 0.25em 0 0 0;
+  border-bottom: 0.125em solid currentColor;
+}
+
+a:hover {
+  cursor: pointer !important;
+  background: var(--body-color);
+  color: var(--background-color);
+  border-bottom: 0.125em solid var(--body-color);
+}
+
+h1, h2, h3 {
+  font-size: 1em;
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin: 0 0 1.2em 0;
+}
+
+.block-type-text li p {
+  padding: 0;
+}
+
+li a {
+  border-bottom:none;
+  text-decoration: none;
+}
+
+.blocks {
+  mix-blend-mode: var(--blend);
+  position: relative;
+}
+
+.block-type-text {
+  min-height: 100vh;
+}
+
+.block-type-text p, .block-type-text ul {
+  position: sticky;
+  top: var(--margin);
+  padding-bottom: 1.2em;
+}
+
+.mobile-break {
+  display: none;
+}
+
+
+
+
+
+@media screen and (max-width:1024px) {
+
+  :root {
+    --margin: 0.75rem;
+  }
+
+body {
+  font-size: calc(var(--mobile-font-size-factor) * var(--font-size));
+  background-image: var(--mobile-background-image);
+}
+
+a {
+  border-bottom: none;
+  text-decoration: underline;
+  -webkit-touch-callout: none;
+}
+
+a:hover, a:active {
+  color: var(--body-color) !important;
+  border-bottom: none !important;
+  background: none !important;
+}
+
+.mobile-break {
+  display: inline;
+}
+
+
+}

@@ -1,0 +1,36 @@
+title: Image
+
+icon: image
+
+options:
+  duplicate: false
+
+tabs:
+  main:
+    label: Main
+    icon: image
+    sections:
+      fields:
+        type: fields
+        fields:
+          gallery_images:
+            label: Images
+            type: files
+            layout: cards
+            uploads:
+              template: image
+            limit: 25
+            info: "{{ file.work_description }}<br />{{ file.caption }}"
+          nav_order:
+            type: hidden
+  uploads:
+    label: Uploads
+    icon: file-image
+    sections:
+      image_uploads:
+        type: files
+        headline: Image Uploads
+        layout: list
+        template: image
+        limit: 25
+        info: "{{ file.caption }}"
