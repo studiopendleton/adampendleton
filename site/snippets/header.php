@@ -12,7 +12,6 @@ $backgroundFocus = $site->desktopBackgroundImage()->toFile()->focus();
 $fontFamily = $site->font();
 ?>
 
-
 <html lang="en" 
 style="--body-color:<?= $bodyColor ?>;
 --background-color:<?= $backgroundColor ?>;
