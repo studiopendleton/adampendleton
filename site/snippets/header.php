@@ -18,10 +18,10 @@ style="--body-color:<?= $bodyColor ?>;
 --font-size:<?= $fontSize ?>;
 --mobile-font-size-factor:<?= $mobileFontSize ?>;
 --font-family: <?php e($fontFamily != null, '\'' . $fontFamily . '\'', '\'Arial\', sans-serif') ?>;
-<?php if (!$site->parallax()->toBool()) {
-  echo '--background-image: url(\'' . $backgroundImage . '\');';
-  echo '--mobile-background-image: url(\'' . $mobileBackgroundImage . '\');';
-}; ?>
+<?php if ($page->isHomePage()): ?>
+  --background-image: url('<?= $backgroundImage ?>');
+  --mobile-background-image: url('<?= $mobileBackgroundImage ?>');
+<?php endif ?>
 --background-position: <?= $backgroundPosition ?>;
 --background-focus-x: <?= $backgroundFocus ?>;
 --background-focus-y: <?= $backgroundFocus ?>;

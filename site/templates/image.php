@@ -11,7 +11,7 @@
 ?>
 
 <?php snippet('header') ?>
-  <div class="layout-wrapper">
+  <main>
     <div class="carousel-wrapper">
       <div class="previous"></div>
       <div class="next"></div>
@@ -33,7 +33,6 @@
         </div>
       <?php endforeach; ?>
     </div>
-  </div>
   </div>
 
   <script>

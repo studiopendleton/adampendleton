@@ -48,7 +48,7 @@ main {
 }
 
 footer {
-  height: calc(100vh - 2 * var(--margin));
+  height: calc(100vh - var(--margin));
   display: flex;
   flex-direction: row;
   align-items: end;
@@ -104,7 +104,6 @@ li a {
 figcaption {
   mix-blend-mode: var(--blend);
   font-size: 66%;
-  line-height: 1.1;
 }
 
 .block-type-text p, .block-type-text ul {
