@@ -93,12 +93,18 @@ li a {
 }
 
 .blocks {
-  mix-blend-mode: var(--blend);
   position: relative;
 }
 
 .block-type-text {
   min-height: 100vh;
+  mix-blend-mode: var(--blend);
+}
+
+figcaption {
+  mix-blend-mode: var(--blend);
+  font-size: 66%;
+  line-height: 1.1;
 }
 
 .block-type-text p, .block-type-text ul {
@@ -109,6 +115,10 @@ li a {
 
 .mobile-break {
   display: none;
+}
+
+img {
+  max-width: 100%;
 }
 
 
