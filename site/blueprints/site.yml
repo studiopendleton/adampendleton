@@ -1,4 +1,5 @@
 title: Site
+pages: true
 
 columns:
   - width: 1/2
@@ -32,7 +33,9 @@ columns:
         headline: Pages
         image: false
         type: pages
-        create: true
+        template:
+          - image
+          - video
 
   - width: 1/2
     sections:

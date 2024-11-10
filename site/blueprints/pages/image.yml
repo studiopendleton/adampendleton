@@ -5,6 +5,10 @@ icon: image
 options:
   duplicate: false
 
+status:
+  draft: Draft
+  unlisted: Unlisted
+
 tabs:
   main:
     label: Main

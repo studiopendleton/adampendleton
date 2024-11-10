@@ -5,8 +5,8 @@
 }
 
 .video-container {
-    max-height: 480px;
-    max-width: 720px;
+    max-height: 720px;
+    max-width: 1080px;
 }
 
 /* Body text style mute toggle
