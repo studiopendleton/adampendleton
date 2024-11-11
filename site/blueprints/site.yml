@@ -73,21 +73,8 @@ columns:
             help: Also controls link hover highlight color.
           backgroundColor:
             width: 1/2
-            label: Background color
+            label: Link hover text color
             type: colors
-            help: Also controls link hover text color.
-          font:
-            label: Font
-            type: select
-            options:
-              Univers: Univers
-              Unica: Unica
-              UnicaMedium: Unica Medium
-              Grotesque: Grotesque
-              Grotesque-Bold: Grotesque-Bold
-              Grotesque-Bold-Extended: Grotesque-Bold-Extended
-              Folio: Folio
-              Gerstner: Gerstner
           fontSize:
             width: 1/2
             label: Font size (desktop)

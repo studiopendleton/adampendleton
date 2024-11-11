@@ -19,6 +19,7 @@ tabs:
             label: Video file
             max: 1
             uploads: video
+            help: Files can be MP4, WEBM, OGG, or MOV.
           autoplay:
             width: 1/6
             label: Autoplay
