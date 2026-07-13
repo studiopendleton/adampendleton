@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSiteSettings } from '../lib/siteSettings';
+
+const settings = await getSiteSettings();
+---
+
+<BaseLayout title={`Page not found | ${settings.title}`} settings={settings}>
+  <header class="site-header">
+    <h1><a href="/">{settings.title}</a></h1>
+  </header>
+
+  <main class="home-main">
+    <div class="home-blocks">
+      <section class="home-block">
+        <p>Page not found.</p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

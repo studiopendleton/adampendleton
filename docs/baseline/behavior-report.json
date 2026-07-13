@@ -1,0 +1,402 @@
+{
+  "capturedAt": "2026-06-03T20:09:26.807Z",
+  "home": [
+    {
+      "label": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scrollHeight": 5024,
+      "positions": [
+        1328,
+        2656
+      ],
+      "sticky": [
+        [
+          {
+            "tag": "p",
+            "className": "",
+            "top": -995,
+            "height": 691,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 24,
+            "height": 230,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 696,
+            "height": 634,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 1696,
+            "height": 115,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 1869,
+            "height": 173,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 2099,
+            "height": 115,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 2272,
+            "height": 173,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 3557,
+            "height": 115,
+            "position": "static",
+            "minHeight": "auto"
+          }
+        ],
+        [
+          {
+            "tag": "p",
+            "className": "",
+            "top": -2323,
+            "height": 691,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": -862,
+            "height": 230,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": -266,
+            "height": 634,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 368,
+            "height": 115,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 541,
+            "height": 173,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 771,
+            "height": 115,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 944,
+            "height": 173,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 2229,
+            "height": 115,
+            "position": "static",
+            "minHeight": "auto"
+          }
+        ]
+      ],
+      "videoPath": "/Users/scozu/Developer/adampendleton/docs/baseline/page@fe6e03e97a894062f8be260256a5678d.webm"
+    },
+    {
+      "label": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollHeight": 4232,
+      "positions": [
+        1118,
+        2236
+      ],
+      "sticky": [
+        [
+          {
+            "tag": "p",
+            "className": "",
+            "top": -924,
+            "height": 662,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 12,
+            "height": 173,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 582,
+            "height": 634,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 1426,
+            "height": 86,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 1541,
+            "height": 115,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 1685,
+            "height": 86,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 1800,
+            "height": 115,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 2987,
+            "height": 115,
+            "position": "static",
+            "minHeight": "auto"
+          }
+        ],
+        [
+          {
+            "tag": "p",
+            "className": "",
+            "top": -2042,
+            "height": 662,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": -709,
+            "height": 173,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": -326,
+            "height": 634,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 308,
+            "height": 86,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 423,
+            "height": 115,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 567,
+            "height": 86,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 682,
+            "height": 115,
+            "position": "sticky",
+            "minHeight": "0px"
+          },
+          {
+            "tag": "p",
+            "className": "",
+            "top": 1869,
+            "height": 115,
+            "position": "static",
+            "minHeight": "auto"
+          }
+        ]
+      ],
+      "videoPath": null
+    }
+  ],
+  "image": [
+    {
+      "label": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "before": {
+        "selectedIndex": 0,
+        "selectedClass": "carousel-cell is-selected",
+        "cellCount": 1,
+        "imageCount": 1,
+        "lazyImages": 0,
+        "firstImageSrc": "http://localhost:8000/media/pages/image/19c5ae7306-1730150353/apn-install-4b-ap_l-2000x.jpg",
+        "sliderTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "bodyClass": ""
+      },
+      "afterArrowRight": {
+        "selectedIndex": 0,
+        "selectedClass": "carousel-cell is-selected",
+        "cellCount": 1,
+        "imageCount": 1,
+        "lazyImages": 0,
+        "firstImageSrc": "http://localhost:8000/media/pages/image/19c5ae7306-1730150353/apn-install-4b-ap_l-2000x.jpg",
+        "sliderTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "bodyClass": ""
+      },
+      "afterArrowLeft": {
+        "selectedIndex": 0,
+        "selectedClass": "carousel-cell is-selected",
+        "cellCount": 1,
+        "imageCount": 1,
+        "lazyImages": 0,
+        "firstImageSrc": "http://localhost:8000/media/pages/image/19c5ae7306-1730150353/apn-install-4b-ap_l-2000x.jpg",
+        "sliderTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "bodyClass": ""
+      },
+      "clickProbe": {
+        "leftExists": false,
+        "rightExists": false,
+        "cursorZones": [
+          {
+            "tag": "div",
+            "className": "previous",
+            "cursor": "url(\"http://localhost:8000/assets/svg/previous.svg\") 0 0, w-resize",
+            "display": "block",
+            "width": 720,
+            "height": 1000
+          },
+          {
+            "tag": "div",
+            "className": "next",
+            "cursor": "url(\"http://localhost:8000/assets/svg/next.svg\") 0 0, e-resize",
+            "display": "block",
+            "width": 720,
+            "height": 1000
+          }
+        ]
+      }
+    },
+    {
+      "label": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "before": {
+        "selectedIndex": 0,
+        "selectedClass": "carousel-cell is-selected",
+        "cellCount": 1,
+        "imageCount": 1,
+        "lazyImages": 0,
+        "firstImageSrc": "http://localhost:8000/media/pages/image/19c5ae7306-1730150353/apn-install-4b-ap_l-2000x.jpg",
+        "sliderTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "bodyClass": ""
+      },
+      "afterArrowRight": {
+        "selectedIndex": 0,
+        "selectedClass": "carousel-cell is-selected",
+        "cellCount": 1,
+        "imageCount": 1,
+        "lazyImages": 0,
+        "firstImageSrc": "http://localhost:8000/media/pages/image/19c5ae7306-1730150353/apn-install-4b-ap_l-2000x.jpg",
+        "sliderTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "bodyClass": ""
+      },
+      "afterArrowLeft": {
+        "selectedIndex": 0,
+        "selectedClass": "carousel-cell is-selected",
+        "cellCount": 1,
+        "imageCount": 1,
+        "lazyImages": 0,
+        "firstImageSrc": "http://localhost:8000/media/pages/image/19c5ae7306-1730150353/apn-install-4b-ap_l-2000x.jpg",
+        "sliderTransform": "matrix(1, 0, 0, 1, 0, 0)",
+        "bodyClass": ""
+      },
+      "clickProbe": {
+        "leftExists": false,
+        "rightExists": false,
+        "cursorZones": []
+      }
+    }
+  ]
+}

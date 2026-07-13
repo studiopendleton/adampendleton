@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSiteSettings } from '../lib/siteSettings';
+
+const settings = await getSiteSettings();
+---
+
+<BaseLayout title={settings.title} settings={settings}>
+  <main class="home-main">
+    <div class="home-blocks">
+      {settings.mainText.map((block) => <section class="home-block" set:html={block.html} />)}
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-content" set:html={settings.footerHtml} />
+  </footer>
+</BaseLayout>

@@ -1,7 +1,0 @@
-title: Default
-options:
-  changeTemplate: true
-
-fields:
-  textarea:
-    label: Content
