@@ -8,12 +8,9 @@ export const structure: StructureResolver = (S) =>
     .title('Content')
     .items([
       S.listItem()
-        .title('Site Settings')
+        .title('Homepage')
         .id(SITE_SETTINGS_DOCUMENT_ID)
         .icon(CogIcon)
         .schemaType('siteSettings')
-        .child(
-          S.document().schemaType('siteSettings').documentId(SITE_SETTINGS_DOCUMENT_ID),
-        ),
-      ...S.documentTypeListItems().filter((item) => item.getId() !== SITE_SETTINGS_DOCUMENT_ID),
+        .child(S.document().schemaType('siteSettings').documentId(SITE_SETTINGS_DOCUMENT_ID)),
     ]);
