@@ -2,15 +2,26 @@ import { CogIcon } from '@sanity/icons';
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import { imageField } from './shared/imageField';
 
+const registeredFonts = [
+  { title: 'ABC Monument Grotesk', value: 'ABCMonumentGrotesk' },
+  { title: 'Unica Medium', value: 'UnicaMedium' },
+  { title: 'Unica', value: 'Unica' },
+] as const;
+
+const monumentFontWeights = [
+  { title: 'Regular', value: '400' },
+  { title: 'Medium', value: '500' },
+  { title: 'Bold', value: '700' },
+] as const;
+
 export const siteSettings = defineType({
   name: 'siteSettings',
-  title: 'Site Settings',
+  title: 'Homepage',
   type: 'document',
   icon: CogIcon,
   groups: [
     { name: 'content', title: 'Content', default: true },
     { name: 'appearance', title: 'Appearance' },
-    { name: 'migration', title: 'Migration (legacy HTML)' },
   ],
   fields: [
     defineField({
@@ -38,22 +49,16 @@ export const siteSettings = defineType({
               type: 'array',
               of: [defineArrayMember({ type: 'block' })],
             }),
-            defineField({
-              name: 'html',
-              title: 'Imported HTML',
-              type: 'text',
-              rows: 4,
-              description:
-                'Legacy Kirby markup. Portable Text content takes precedence when populated. Remove after migration is complete.',
-            }),
           ],
           preview: {
-            select: { content: 'content', html: 'html' },
-            prepare: ({ content, html }) => ({
+            select: { content: 'content' },
+            prepare: ({ content }) => ({
               title:
-                content?.[0]?.children?.map((child: { text?: string }) => child.text).join('') ||
-                html?.replace(/<[^>]*>/g, '').slice(0, 80) ||
-                'Text block',
+                content?.[0]?.children
+                  ?.map((child: { text?: string }) => child.text)
+                  .join('')
+                  .replace(/\n/g, ' ')
+                  .slice(0, 80) || 'Text block',
             }),
           },
         }),
@@ -74,15 +79,6 @@ export const siteSettings = defineType({
       group: 'content',
       of: [defineArrayMember({ type: 'block' })],
     }),
-    defineField({
-      name: 'footerHtml',
-      title: 'Imported Footer HTML',
-      type: 'text',
-      group: 'migration',
-      rows: 3,
-      description:
-        'Legacy Kirby footer markup. Portable Text footer content takes precedence when populated. Remove after migration is complete.',
-    }),
     imageField('desktopBackgroundImage', 'Desktop Background Image', 'appearance'),
     imageField('mobileBackgroundImage', 'Mobile Background Image', 'appearance'),
     defineField({
@@ -95,19 +91,20 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'bodyTextColor',
-      title: 'Body Background Color',
-      type: 'string',
-      group: 'appearance',
-      description: 'Used as the page background behind text blocks (CSS --body-color).',
-      initialValue: 'rgb(35, 35, 35)',
-    }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Text & Link Color',
+      title: 'Body text color',
       type: 'string',
       group: 'appearance',
       description:
-        'Legacy Kirby field name. Controls body text and link hover color (CSS --background-color).',
+        'CSS --body-color: body text color, and the background behind link hover text. Hex or rgb strings (e.g. #232323).',
+      initialValue: '#232323',
+    }),
+    defineField({
+      name: 'backgroundColor',
+      title: 'Link hover text color',
+      type: 'string',
+      group: 'appearance',
+      description:
+        'CSS --background-color: page background under the image, and link hover text color. Hex or rgb strings (e.g. #ffffff).',
       initialValue: '#ffffff',
     }),
     defineField({
@@ -138,7 +135,35 @@ export const siteSettings = defineType({
       title: 'Font',
       type: 'string',
       group: 'appearance',
-      initialValue: 'UnicaMedium',
+      options: {
+        list: registeredFonts.map(({ title, value }) => ({ title, value })),
+        layout: 'radio',
+      },
+      initialValue: 'ABCMonumentGrotesk',
+      validation: (rule) =>
+        rule.required().custom((value) => {
+          if (!value || registeredFonts.some((font) => font.value === value)) return true;
+          return 'Font must match a @font-face family in global.css';
+        }),
+    }),
+    defineField({
+      name: 'fontWeight',
+      title: 'Font weight',
+      type: 'string',
+      group: 'appearance',
+      options: {
+        list: monumentFontWeights.map(({ title, value }) => ({ title, value })),
+        layout: 'radio',
+      },
+      initialValue: '400',
+      hidden: ({ document }) => document?.font !== 'ABCMonumentGrotesk',
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const font = (context.document as { font?: string } | undefined)?.font;
+          if (font !== 'ABCMonumentGrotesk') return true;
+          if (!value || monumentFontWeights.some((weight) => weight.value === value)) return true;
+          return 'Pick Regular, Medium, or Bold';
+        }),
     }),
   ],
 });

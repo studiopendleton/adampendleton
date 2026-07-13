@@ -48,7 +48,6 @@ export type SiteSettings = {
       _type: "block";
       _key: string;
     }>;
-    html?: string;
     _type: "homeTextBlock";
     _key: string;
   }>;
@@ -71,7 +70,6 @@ export type SiteSettings = {
     _type: "block";
     _key: string;
   }>;
-  footerHtml?: string;
   desktopBackgroundImage?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -94,7 +92,7 @@ export type SiteSettings = {
   fontSize?: "2.5rem" | "3rem" | "3.5rem" | "4rem";
   mobileFontSize?: 0.25 | 0.33 | 0.5 | 0.66;
   blend?: boolean;
-  font?: string;
+  font?: "ABCMonumentGrotesk" | "UnicaMedium" | "Unica";
 };
 
 export type SanityImageCrop = {
@@ -216,147 +214,115 @@ export type Slug = {
   source?: string;
 };
 
-export type AllSanitySchemaTypes =
-  | SanityImageAssetReference
-  | SiteSettings
-  | SanityImageCrop
-  | SanityImageHotspot
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityImageMetadata
-  | SanityFileAsset
-  | SanityAssetSourceData
-  | SanityImageAsset
-  | Geopoint
-  | Slug;
+export type AllSanitySchemaTypes = SanityImageAssetReference | SiteSettings | SanityImageCrop | SanityImageHotspot | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint | Slug;
 
 // Source: src/lib/queries.ts
 // Variable: siteSettingsQuery
-// Query: *[_id == "siteSettings"][0]{  title,  mainText[]{    _key,    content,    html  },  frameHeight,  footerText,  footerHtml,  desktopBackgroundImage {  asset->{    _id,    url,    metadata {      lqip,      dimensions { width, height }    }  },  alt,  hotspot,  crop},  mobileBackgroundImage {  asset->{    _id,    url,    metadata {      lqip,      dimensions { width, height }    }  },  alt,  hotspot,  crop},  backgroundPosition,  bodyTextColor,  backgroundColor,  fontSize,  mobileFontSize,  blend,  font}
-export type SiteSettingsQueryResult =
-  | {
-      title: string | null;
-      mainText: null;
-      frameHeight: null;
-      footerText: null;
-      footerHtml: null;
-      desktopBackgroundImage: null;
-      mobileBackgroundImage: null;
-      backgroundPosition: null;
-      bodyTextColor: null;
-      backgroundColor: null;
-      fontSize: null;
-      mobileFontSize: null;
-      blend: null;
-      font: null;
-    }
-  | {
-      title: string | null;
-      mainText: Array<{
+// Query: *[_id == "siteSettings"][0]{  title,  mainText[]{    _key,    content  },  frameHeight,  footerText,  desktopBackgroundImage {  asset->{    _id,    url,    metadata {      lqip,      dimensions { width, height }    }  },  alt,  hotspot,  crop},  mobileBackgroundImage {  asset->{    _id,    url,    metadata {      lqip,      dimensions { width, height }    }  },  alt,  hotspot,  crop},  backgroundPosition,  bodyTextColor,  backgroundColor,  fontSize,  mobileFontSize,  blend,  font,  fontWeight}
+export type SiteSettingsQueryResult = {
+  title: string | null;
+  mainText: null;
+  frameHeight: null;
+  footerText: null;
+  desktopBackgroundImage: null;
+  mobileBackgroundImage: null;
+  backgroundPosition: null;
+  bodyTextColor: null;
+  backgroundColor: null;
+  fontSize: null;
+  mobileFontSize: null;
+  blend: null;
+  font: null;
+  fontWeight: null;
+} | {
+  title: string | null;
+  mainText: Array<{
+    _key: string;
+    content: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
         _key: string;
-        content: Array<{
-          children?: Array<{
-            marks?: Array<string>;
-            text?: string;
-            _type: "span";
-            _key: string;
-          }>;
-          style?:
-            | "blockquote"
-            | "h1"
-            | "h2"
-            | "h3"
-            | "h4"
-            | "h5"
-            | "h6"
-            | "normal";
-          listItem?: "bullet" | "number";
-          markDefs?: Array<{
-            href?: string;
-            _type: "link";
-            _key: string;
-          }>;
-          level?: number;
-          _type: "block";
-          _key: string;
-        }> | null;
-        html: string | null;
-      }> | null;
-      frameHeight: number | null;
-      footerText: Array<{
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          | "blockquote"
-          | "h1"
-          | "h2"
-          | "h3"
-          | "h4"
-          | "h5"
-          | "h6"
-          | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
         _key: string;
-      }> | null;
-      footerHtml: string | null;
-      desktopBackgroundImage: {
-        asset: {
-          _id: string;
-          url: string | null;
-          metadata: {
-            lqip: string | null;
-            dimensions: {
-              width: number | null;
-              height: number | null;
-            } | null;
-          } | null;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+  }> | null;
+  frameHeight: number | null;
+  footerText: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+  desktopBackgroundImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number | null;
+          height: number | null;
         } | null;
-        alt: string | null;
-        hotspot: SanityImageHotspot | null;
-        crop: SanityImageCrop | null;
       } | null;
-      mobileBackgroundImage: {
-        asset: {
-          _id: string;
-          url: string | null;
-          metadata: {
-            lqip: string | null;
-            dimensions: {
-              width: number | null;
-              height: number | null;
-            } | null;
-          } | null;
+    } | null;
+    alt: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  mobileBackgroundImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number | null;
+          height: number | null;
         } | null;
-        alt: string | null;
-        hotspot: SanityImageHotspot | null;
-        crop: SanityImageCrop | null;
       } | null;
-      backgroundPosition: "bottom" | "center" | "top" | null;
-      bodyTextColor: string | null;
-      backgroundColor: string | null;
-      fontSize: "2.5rem" | "3.5rem" | "3rem" | "4rem" | null;
-      mobileFontSize: 0.25 | 0.33 | 0.5 | 0.66 | null;
-      blend: boolean | null;
-      font: string | null;
-    }
-  | null;
+    } | null;
+    alt: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  backgroundPosition: "bottom" | "center" | "top" | null;
+  bodyTextColor: string | null;
+  backgroundColor: string | null;
+  fontSize: "2.5rem" | "3.5rem" | "3rem" | "4rem" | null;
+  mobileFontSize: 0.25 | 0.33 | 0.5 | 0.66 | null;
+  blend: boolean | null;
+  font: "ABCMonumentGrotesk" | "Unica" | "UnicaMedium" | null;
+  fontWeight: null;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_id == "siteSettings"][0]{\n  title,\n  mainText[]{\n    _key,\n    content,\n    html\n  },\n  frameHeight,\n  footerText,\n  footerHtml,\n  desktopBackgroundImage {\n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions { width, height }\n    }\n  },\n  alt,\n  hotspot,\n  crop\n},\n  mobileBackgroundImage {\n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions { width, height }\n    }\n  },\n  alt,\n  hotspot,\n  crop\n},\n  backgroundPosition,\n  bodyTextColor,\n  backgroundColor,\n  fontSize,\n  mobileFontSize,\n  blend,\n  font\n}': SiteSettingsQueryResult;
+    "*[_id == \"siteSettings\"][0]{\n  title,\n  mainText[]{\n    _key,\n    content\n  },\n  frameHeight,\n  footerText,\n  desktopBackgroundImage {\n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions { width, height }\n    }\n  },\n  alt,\n  hotspot,\n  crop\n},\n  mobileBackgroundImage {\n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions { width, height }\n    }\n  },\n  alt,\n  hotspot,\n  crop\n},\n  backgroundPosition,\n  bodyTextColor,\n  backgroundColor,\n  fontSize,\n  mobileFontSize,\n  blend,\n  font,\n  fontWeight\n}": SiteSettingsQueryResult;
   }
 }
+

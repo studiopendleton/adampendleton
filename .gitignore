@@ -4,6 +4,7 @@ dist/
 # generated types
 .astro/
 .wrangler/
+.sanity/
 schema.json
 
 # dependencies

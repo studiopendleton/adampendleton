@@ -17,6 +17,7 @@
     "sanity:schema-deploy": "sanity schema deploy",
     "sanity:typegen": "sanity schema extract && sanity typegen generate",
     "sanity:upload-backgrounds": "sanity exec scripts/upload-background-images.ts --with-user-token",
+    "sanity:migrate-pt": "sanity exec scripts/migrate-site-settings-pt.ts --with-user-token",
     "astro": "astro"
   },
   "dependencies": {
@@ -24,10 +25,9 @@
     "@sanity/client": "^7.22.1",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^2.1.1",
-    "groq": "^3.88.1",
-    "@sanity/vision": "^5.30.0",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.4",
+    "groq": "^3.88.1",
     "sanity": "^5.30.0",
     "styled-components": "^6.4.2",
     "tailwindcss": "^4.3.0",

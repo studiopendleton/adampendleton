@@ -1,5 +1,54 @@
 @import "tailwindcss";
 
+/* Register new faces from files dropped in /public/fonts. */
+@font-face {
+  font-family: "ABCMonumentGrotesk";
+  src: url("/fonts/ABCMonumentGrotesk-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ABCMonumentGrotesk";
+  src: url("/fonts/ABCMonumentGrotesk-RegularItalic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ABCMonumentGrotesk";
+  src: url("/fonts/ABCMonumentGrotesk-Medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ABCMonumentGrotesk";
+  src: url("/fonts/ABCMonumentGrotesk-MediumItalic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ABCMonumentGrotesk";
+  src: url("/fonts/ABCMonumentGrotesk-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ABCMonumentGrotesk";
+  src: url("/fonts/ABCMonumentGrotesk-BoldItalic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "UnicaMedium";
   src: url("/fonts/Unica77LL-Medium.otf") format("opentype");
@@ -18,10 +67,11 @@
 
 :root {
   --margin: 1.5rem;
-  --font-family: "UnicaMedium", Arial, sans-serif;
+  --font-family: "ABCMonumentGrotesk", Arial, sans-serif;
+  --font-weight: 400;
   --font-size: 3rem;
   --mobile-font-size-factor: 0.5;
-  --body-color: rgb(35, 35, 35);
+  --body-color: #232323;
   --background-color: #ffffff;
   --background-image: url("/images/background-desktop.jpg");
   --mobile-background-image: url("/images/background-mobile.jpg");
@@ -55,6 +105,7 @@ body {
   background-size: cover;
   color: var(--body-color);
   font-family: var(--font-family);
+  font-weight: var(--font-weight);
   font-size: var(--font-size);
   line-height: 1.2;
 }

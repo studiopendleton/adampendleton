@@ -6,31 +6,340 @@
     {
       "_type": "homeTextBlock",
       "_key": "c989dd1dba3549a6b9149f2ea25bd357",
-      "html": "<p>Adam Pendleton, a central figure in contemporary abstract painting, is known for works that push the boundaries of the medium through a sustained engagement with process, language, and form. He extends non-linear compositional traditions that are rooted in twentieth- and twenty-first-century painting. His work, a distilled layering of gesture and fragment, is marked by a precision reminiscent of Conceptual and Minimal art. In 2008, he began to define the working method for which he is now widely recognized as Black Dada—a critical framework that explores the relationship between Blackness, abstraction, and the historical avant-gardes.</p>"
+      "content": [
+        {
+          "_type": "block",
+          "_key": "bio1",
+          "style": "normal",
+          "markDefs": [],
+          "children": [
+            {
+              "_type": "span",
+              "_key": "bio1s",
+              "marks": [],
+              "text": "Adam Pendleton, a central figure in contemporary abstract painting, is known for works that push the boundaries of the medium through a sustained engagement with process, language, and form. He extends non-linear compositional traditions that are rooted in twentieth- and twenty-first-century painting. His work, a distilled layering of gesture and fragment, is marked by a precision reminiscent of Conceptual and Minimal art. In 2008, he began to define the working method for which he is now widely recognized as Black Dada—a critical framework that explores the relationship between Blackness, abstraction, and the historical avant-gardes."
+            }
+          ]
+        }
+      ]
     },
     {
       "_type": "homeTextBlock",
       "_key": "763b19424b254fb88b479f2ea25c509",
-      "html": "<p>In 2024, he was honored with the Rosenthal Family Foundation Award for Painting from the American Academy of Arts and Letters.</p>"
+      "content": [
+        {
+          "_type": "block",
+          "_key": "award1",
+          "style": "normal",
+          "markDefs": [],
+          "children": [
+            {
+              "_type": "span",
+              "_key": "award1s",
+              "marks": [],
+              "text": "In 2024, he was honored with the Rosenthal Family Foundation Award for Painting from the American Academy of Arts and Letters."
+            }
+          ]
+        }
+      ]
     },
     {
       "_type": "homeTextBlock",
       "_key": "0a3f7c5246cf45299cd8fadd1f497ba4",
-      "html": "<p>Pendleton’s work is held in numerous public collections, including The Museum of Modern Art, New York; the Solomon R. Guggenheim Museum, New York; the Whitney Museum of American Art, New York; the Studio Museum in Harlem, New York; the Carnegie Museum of Art, Pittsburgh; the Museum of Contemporary Art Chicago; the Los Angeles County Museum of Art; the Museum of Contemporary Art San Diego; the Virginia Museum of Fine Arts, Richmond; the Montreal Museum of Fine Arts; the National Gallery of Canada, Ottawa; Tate, London; and the Pinakothek der Moderne, Munich.</p>"
+      "content": [
+        {
+          "_type": "block",
+          "_key": "coll1",
+          "style": "normal",
+          "markDefs": [],
+          "children": [
+            {
+              "_type": "span",
+              "_key": "coll1s",
+              "marks": [],
+              "text": "Pendleton’s work is held in numerous public collections, including The Museum of Modern Art, New York; the Solomon R. Guggenheim Museum, New York; the Whitney Museum of American Art, New York; the Studio Museum in Harlem, New York; the Carnegie Museum of Art, Pittsburgh; the Museum of Contemporary Art Chicago; the Los Angeles County Museum of Art; the Museum of Contemporary Art San Diego; the Virginia Museum of Fine Arts, Richmond; the Montreal Museum of Fine Arts; the National Gallery of Canada, Ottawa; Tate, London; and the Pinakothek der Moderne, Munich."
+            }
+          ]
+        }
+      ]
     },
     {
       "_type": "homeTextBlock",
       "_key": "presslinks",
-      "html": "<ul><li><p><a href=\"https://www.nytimes.com/2021/09/10/arts/design/adam-pendleton-moma-who-is-queen.html#:~:text=%E2%80%9CWho%20Is%20Queen%3F%E2%80%9D%20at,the%20museum%2C%E2%80%9D%20he%20said.\" target=\"_blank\">“Adam Pendleton is Rethinking the Museum”<br><em>New York Times </em>→</a></p></li><li><p><a href=\"https://www.frieze.com/article/adam-pendleton-celebrates-poetry-wildness-and-black-resistance\" target=\"_blank\">“Adam Pendleton Celebrates Poetry, Wildness, and Black Resistance”<br><em>Frieze </em>→</a></p></li><li><p><a href=\"https://www.nytimes.com/2024/06/07/t-magazine/adam-pendleton-pace-gallery.html\" target=\"_blank\">“Adam Pendleton Holds Our Attention”<br><em>New York Times T Magazine </em>→</a></p></li><li><p><a href=\"https://www.nytimes.com/2025/04/24/arts/design/adam-pendleton-hirshhorn-museum.html\" target=\"_blank\" title=\"In the Heart of Washington, Adam Pendleton’s Work Demands Deep Thought\">“In the Heart of Washington, Adam Pendleton’s Work Demands Deep Thought”<em><br>New York Times </em>→</a></p></li></ul>"
+      "content": [
+        {
+          "_type": "block",
+          "_key": "press1",
+          "style": "normal",
+          "listItem": "bullet",
+          "level": 1,
+          "markDefs": [
+            {
+              "_type": "link",
+              "_key": "nytQueen",
+              "href": "https://www.nytimes.com/2021/09/10/arts/design/adam-pendleton-moma-who-is-queen.html#:~:text=%E2%80%9CWho%20Is%20Queen%3F%E2%80%9D%20at,the%20museum%2C%E2%80%9D%20he%20said."
+            }
+          ],
+          "children": [
+            {
+              "_type": "span",
+              "_key": "press1a",
+              "marks": [
+                "nytQueen"
+              ],
+              "text": "“Adam Pendleton is Rethinking the Museum”"
+            },
+            {
+              "_type": "span",
+              "_key": "press1br",
+              "marks": [
+                "nytQueen"
+              ],
+              "text": "\n"
+            },
+            {
+              "_type": "span",
+              "_key": "press1b",
+              "marks": [
+                "nytQueen",
+                "em"
+              ],
+              "text": "New York Times "
+            },
+            {
+              "_type": "span",
+              "_key": "press1c",
+              "marks": [
+                "nytQueen"
+              ],
+              "text": "→"
+            }
+          ]
+        },
+        {
+          "_type": "block",
+          "_key": "press2",
+          "style": "normal",
+          "listItem": "bullet",
+          "level": 1,
+          "markDefs": [
+            {
+              "_type": "link",
+              "_key": "frieze",
+              "href": "https://www.frieze.com/article/adam-pendleton-celebrates-poetry-wildness-and-black-resistance"
+            }
+          ],
+          "children": [
+            {
+              "_type": "span",
+              "_key": "press2a",
+              "marks": [
+                "frieze"
+              ],
+              "text": "“Adam Pendleton Celebrates Poetry, Wildness, and Black Resistance”"
+            },
+            {
+              "_type": "span",
+              "_key": "press2br",
+              "marks": [
+                "frieze"
+              ],
+              "text": "\n"
+            },
+            {
+              "_type": "span",
+              "_key": "press2b",
+              "marks": [
+                "frieze",
+                "em"
+              ],
+              "text": "Frieze "
+            },
+            {
+              "_type": "span",
+              "_key": "press2c",
+              "marks": [
+                "frieze"
+              ],
+              "text": "→"
+            }
+          ]
+        },
+        {
+          "_type": "block",
+          "_key": "press3",
+          "style": "normal",
+          "listItem": "bullet",
+          "level": 1,
+          "markDefs": [
+            {
+              "_type": "link",
+              "_key": "nytT",
+              "href": "https://www.nytimes.com/2024/06/07/t-magazine/adam-pendleton-pace-gallery.html"
+            }
+          ],
+          "children": [
+            {
+              "_type": "span",
+              "_key": "press3a",
+              "marks": [
+                "nytT"
+              ],
+              "text": "“Adam Pendleton Holds Our Attention”"
+            },
+            {
+              "_type": "span",
+              "_key": "press3br",
+              "marks": [
+                "nytT"
+              ],
+              "text": "\n"
+            },
+            {
+              "_type": "span",
+              "_key": "press3b",
+              "marks": [
+                "nytT",
+                "em"
+              ],
+              "text": "New York Times T Magazine "
+            },
+            {
+              "_type": "span",
+              "_key": "press3c",
+              "marks": [
+                "nytT"
+              ],
+              "text": "→"
+            }
+          ]
+        },
+        {
+          "_type": "block",
+          "_key": "press4",
+          "style": "normal",
+          "listItem": "bullet",
+          "level": 1,
+          "markDefs": [
+            {
+              "_type": "link",
+              "_key": "nytHirsh",
+              "href": "https://www.nytimes.com/2025/04/24/arts/design/adam-pendleton-hirshhorn-museum.html"
+            }
+          ],
+          "children": [
+            {
+              "_type": "span",
+              "_key": "press4a",
+              "marks": [
+                "nytHirsh"
+              ],
+              "text": "“In the Heart of Washington, Adam Pendleton’s Work Demands Deep Thought”"
+            },
+            {
+              "_type": "span",
+              "_key": "press4br",
+              "marks": [
+                "nytHirsh"
+              ],
+              "text": "\n"
+            },
+            {
+              "_type": "span",
+              "_key": "press4b",
+              "marks": [
+                "nytHirsh",
+                "em"
+              ],
+              "text": "New York Times "
+            },
+            {
+              "_type": "span",
+              "_key": "press4c",
+              "marks": [
+                "nytHirsh"
+              ],
+              "text": "→"
+            }
+          ]
+        }
+      ]
     }
   ],
   "frameHeight": 100,
-  "footerHtml": "For more information, <br class=\"mobile-break\"><a href=\"mailto:info@adampendleton.net\">email the studio</a>.<br> <a href=\"https://www.instagram.com/pendleton.adam/\">IG</a>",
+  "footerText": [
+    {
+      "_type": "block",
+      "_key": "footer1",
+      "style": "normal",
+      "markDefs": [
+        {
+          "_type": "link",
+          "_key": "email",
+          "href": "mailto:info@adampendleton.net"
+        },
+        {
+          "_type": "link",
+          "_key": "ig",
+          "href": "https://www.instagram.com/pendleton.adam/"
+        }
+      ],
+      "children": [
+        {
+          "_type": "span",
+          "_key": "footer1a",
+          "marks": [],
+          "text": "For more information, "
+        },
+        {
+          "_type": "span",
+          "_key": "footer1mobile",
+          "marks": [],
+          "text": "\n"
+        },
+        {
+          "_type": "span",
+          "_key": "footer1b",
+          "marks": [
+            "email"
+          ],
+          "text": "email the studio"
+        },
+        {
+          "_type": "span",
+          "_key": "footer1c",
+          "marks": [],
+          "text": "."
+        },
+        {
+          "_type": "span",
+          "_key": "footer1ig",
+          "marks": [],
+          "text": "\n"
+        },
+        {
+          "_type": "span",
+          "_key": "footer1d",
+          "marks": [],
+          "text": " "
+        },
+        {
+          "_type": "span",
+          "_key": "footer1e",
+          "marks": [
+            "ig"
+          ],
+          "text": "IG"
+        }
+      ]
+    }
+  ],
   "backgroundPosition": "top",
-  "bodyTextColor": "rgb(35, 35, 35)",
+  "bodyTextColor": "#232323",
   "backgroundColor": "#ffffff",
   "fontSize": "3rem",
   "mobileFontSize": 0.5,
   "blend": true,
-  "font": "UnicaMedium"
+  "font": "ABCMonumentGrotesk",
+  "fontWeight": "400"
 }
