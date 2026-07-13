@@ -45,18 +45,25 @@ const fallbackSiteSettings: SiteSettings = {
   desktopBackgroundImage: '/images/background-desktop.jpg',
   mobileBackgroundImage: '/images/background-mobile.jpg',
   backgroundPosition: 'top',
-  bodyTextColor: 'rgb(35, 35, 35)',
+  bodyTextColor: '#232323',
   backgroundColor: '#ffffff',
   fontSize: '3rem',
   mobileFontSize: 0.5,
   blend: true,
-  font: 'UnicaMedium',
+  font: 'ABCMonumentGrotesk',
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   try {
     const settings = await sanityClient.fetch(siteSettingsQuery);
     if (!settings) return fallbackSiteSettings;
+
+    const mainText =
+      settings.mainText
+        ?.map((block) => ({ html: portableTextToHtml(block.content) }))
+        .filter((block) => block.html.length > 0) ?? [];
+
+    const footerFromPt = normalizeFooterHtml(portableTextToHtml(settings.footerText));
 
     return {
       title: settings.title ?? fallbackSiteSettings.title,
@@ -70,15 +77,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       mobileFontSize: settings.mobileFontSize ?? fallbackSiteSettings.mobileFontSize,
       blend: settings.blend ?? fallbackSiteSettings.blend,
       font: settings.font ?? fallbackSiteSettings.font,
-      mainText:
-        settings.mainText?.map((block) => ({
-          html: portableTextToHtml(block.content) || block.html || '',
-        })) ?? fallbackSiteSettings.mainText,
-      footerHtml: normalizeFooterHtml(
-        portableTextToHtml(settings.footerText) ||
-          settings.footerHtml ||
-          fallbackSiteSettings.footerHtml,
-      ),
+      mainText: mainText.length > 0 ? mainText : fallbackSiteSettings.mainText,
+      footerHtml: footerFromPt || fallbackSiteSettings.footerHtml,
       desktopBackgroundImage:
         backgroundImageUrl(settings.desktopBackgroundImage) ??
         fallbackSiteSettings.desktopBackgroundImage,
@@ -92,10 +92,12 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 
 function normalizeFooterHtml(html: string): string {
-  // Keep the Instagram link on its own line on desktop too (not only mobile).
+  if (!html) return '';
+
+  // PT hard breaks become <br>; first break before the email link stays mobile-only.
   return html.replace(
-    /<br class="mobile-break">(\s*<a\b[^>]*href="[^"]*instagram\.com[^"]*"[^>]*>)/i,
-    '<br>$1',
+    /(For more information,\s*)<br\s*\/?>/i,
+    '$1<br class="mobile-break">',
   );
 }
 

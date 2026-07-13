@@ -18,12 +18,10 @@ export const siteSettingsQuery = defineQuery(/* groq */ `*[_id == "siteSettings"
   title,
   mainText[]{
     _key,
-    content,
-    html
+    content
   },
   frameHeight,
   footerText,
-  footerHtml,
   desktopBackgroundImage ${imageProjection},
   mobileBackgroundImage ${imageProjection},
   backgroundPosition,
