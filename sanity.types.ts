@@ -48,7 +48,6 @@ export type SiteSettings = {
       _type: "block";
       _key: string;
     }>;
-    html?: string;
     _type: "homeTextBlock";
     _key: string;
   }>;
@@ -71,7 +70,6 @@ export type SiteSettings = {
     _type: "block";
     _key: string;
   }>;
-  footerHtml?: string;
   desktopBackgroundImage?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -94,7 +92,7 @@ export type SiteSettings = {
   fontSize?: "2.5rem" | "3rem" | "3.5rem" | "4rem";
   mobileFontSize?: 0.25 | 0.33 | 0.5 | 0.66;
   blend?: boolean;
-  font?: string;
+  font?: "ABCMonumentGrotesk" | "UnicaMedium" | "Unica";
 };
 
 export type SanityImageCrop = {
@@ -233,14 +231,13 @@ export type AllSanitySchemaTypes =
 
 // Source: src/lib/queries.ts
 // Variable: siteSettingsQuery
-// Query: *[_id == "siteSettings"][0]{  title,  mainText[]{    _key,    content,    html  },  frameHeight,  footerText,  footerHtml,  desktopBackgroundImage {  asset->{    _id,    url,    metadata {      lqip,      dimensions { width, height }    }  },  alt,  hotspot,  crop},  mobileBackgroundImage {  asset->{    _id,    url,    metadata {      lqip,      dimensions { width, height }    }  },  alt,  hotspot,  crop},  backgroundPosition,  bodyTextColor,  backgroundColor,  fontSize,  mobileFontSize,  blend,  font}
+// Query: *[_id == "siteSettings"][0]{  title,  mainText[]{    _key,    content  },  frameHeight,  footerText,  desktopBackgroundImage {  asset->{    _id,    url,    metadata {      lqip,      dimensions { width, height }    }  },  alt,  hotspot,  crop},  mobileBackgroundImage {  asset->{    _id,    url,    metadata {      lqip,      dimensions { width, height }    }  },  alt,  hotspot,  crop},  backgroundPosition,  bodyTextColor,  backgroundColor,  fontSize,  mobileFontSize,  blend,  font}
 export type SiteSettingsQueryResult =
   | {
       title: string | null;
       mainText: null;
       frameHeight: null;
       footerText: null;
-      footerHtml: null;
       desktopBackgroundImage: null;
       mobileBackgroundImage: null;
       backgroundPosition: null;
@@ -281,7 +278,6 @@ export type SiteSettingsQueryResult =
           _type: "block";
           _key: string;
         }> | null;
-        html: string | null;
       }> | null;
       frameHeight: number | null;
       footerText: Array<{
@@ -310,7 +306,6 @@ export type SiteSettingsQueryResult =
         _type: "block";
         _key: string;
       }> | null;
-      footerHtml: string | null;
       desktopBackgroundImage: {
         asset: {
           _id: string;
@@ -349,7 +344,7 @@ export type SiteSettingsQueryResult =
       fontSize: "2.5rem" | "3.5rem" | "3rem" | "4rem" | null;
       mobileFontSize: 0.25 | 0.33 | 0.5 | 0.66 | null;
       blend: boolean | null;
-      font: string | null;
+      font: "ABCMonumentGrotesk" | "Unica" | "UnicaMedium" | null;
     }
   | null;
 
@@ -357,6 +352,6 @@ export type SiteSettingsQueryResult =
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_id == "siteSettings"][0]{\n  title,\n  mainText[]{\n    _key,\n    content,\n    html\n  },\n  frameHeight,\n  footerText,\n  footerHtml,\n  desktopBackgroundImage {\n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions { width, height }\n    }\n  },\n  alt,\n  hotspot,\n  crop\n},\n  mobileBackgroundImage {\n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions { width, height }\n    }\n  },\n  alt,\n  hotspot,\n  crop\n},\n  backgroundPosition,\n  bodyTextColor,\n  backgroundColor,\n  fontSize,\n  mobileFontSize,\n  blend,\n  font\n}': SiteSettingsQueryResult;
+    '*[_id == "siteSettings"][0]{\n  title,\n  mainText[]{\n    _key,\n    content\n  },\n  frameHeight,\n  footerText,\n  desktopBackgroundImage {\n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions { width, height }\n    }\n  },\n  alt,\n  hotspot,\n  crop\n},\n  mobileBackgroundImage {\n  asset->{\n    _id,\n    url,\n    metadata {\n      lqip,\n      dimensions { width, height }\n    }\n  },\n  alt,\n  hotspot,\n  crop\n},\n  backgroundPosition,\n  bodyTextColor,\n  backgroundColor,\n  fontSize,\n  mobileFontSize,\n  blend,\n  font\n}': SiteSettingsQueryResult;
   }
 }

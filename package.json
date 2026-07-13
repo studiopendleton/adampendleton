@@ -17,6 +17,7 @@
     "sanity:schema-deploy": "sanity schema deploy",
     "sanity:typegen": "sanity schema extract && sanity typegen generate",
     "sanity:upload-backgrounds": "sanity exec scripts/upload-background-images.ts --with-user-token",
+    "sanity:migrate-pt": "sanity exec scripts/migrate-site-settings-pt.ts --with-user-token",
     "astro": "astro"
   },
   "dependencies": {
