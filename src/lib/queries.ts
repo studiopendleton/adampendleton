@@ -30,5 +30,6 @@ export const siteSettingsQuery = defineQuery(/* groq */ `*[_id == "siteSettings"
   fontSize,
   mobileFontSize,
   blend,
-  font
+  font,
+  fontWeight
 }`);

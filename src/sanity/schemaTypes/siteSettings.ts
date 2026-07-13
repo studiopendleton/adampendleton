@@ -8,6 +8,12 @@ const registeredFonts = [
   { title: 'Unica', value: 'Unica' },
 ] as const;
 
+const monumentFontWeights = [
+  { title: 'Regular', value: '400' },
+  { title: 'Medium', value: '500' },
+  { title: 'Bold', value: '700' },
+] as const;
+
 export const siteSettings = defineType({
   name: 'siteSettings',
   title: 'Homepage',
@@ -138,6 +144,25 @@ export const siteSettings = defineType({
         rule.required().custom((value) => {
           if (!value || registeredFonts.some((font) => font.value === value)) return true;
           return 'Font must match a @font-face family in global.css';
+        }),
+    }),
+    defineField({
+      name: 'fontWeight',
+      title: 'Font weight',
+      type: 'string',
+      group: 'appearance',
+      options: {
+        list: monumentFontWeights.map(({ title, value }) => ({ title, value })),
+        layout: 'radio',
+      },
+      initialValue: '400',
+      hidden: ({ document }) => document?.font !== 'ABCMonumentGrotesk',
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const font = (context.document as { font?: string } | undefined)?.font;
+          if (font !== 'ABCMonumentGrotesk') return true;
+          if (!value || monumentFontWeights.some((weight) => weight.value === value)) return true;
+          return 'Pick Regular, Medium, or Bold';
         }),
     }),
   ],

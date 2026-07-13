@@ -21,6 +21,7 @@ export type SiteSettings = {
   mobileFontSize: number;
   blend: boolean;
   font: string;
+  fontWeight: '400' | '500' | '700';
 };
 
 const fallbackSiteSettings: SiteSettings = {
@@ -51,6 +52,7 @@ const fallbackSiteSettings: SiteSettings = {
   mobileFontSize: 0.5,
   blend: true,
   font: 'ABCMonumentGrotesk',
+  fontWeight: '400',
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -77,6 +79,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       mobileFontSize: settings.mobileFontSize ?? fallbackSiteSettings.mobileFontSize,
       blend: settings.blend ?? fallbackSiteSettings.blend,
       font: settings.font ?? fallbackSiteSettings.font,
+      fontWeight: normalizeFontWeight(settings.fontWeight),
       mainText: mainText.length > 0 ? mainText : fallbackSiteSettings.mainText,
       footerHtml: footerFromPt || fallbackSiteSettings.footerHtml,
       desktopBackgroundImage:
@@ -89,6 +92,11 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   } catch {
     return fallbackSiteSettings;
   }
+}
+
+function normalizeFontWeight(value?: string | null): SiteSettings['fontWeight'] {
+  if (value === '400' || value === '500' || value === '700') return value;
+  return fallbackSiteSettings.fontWeight;
 }
 
 function normalizeFooterHtml(html: string): string {

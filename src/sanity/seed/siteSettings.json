@@ -340,5 +340,6 @@
   "fontSize": "3rem",
   "mobileFontSize": 0.5,
   "blend": true,
-  "font": "ABCMonumentGrotesk"
+  "font": "ABCMonumentGrotesk",
+  "fontWeight": "400"
 }
