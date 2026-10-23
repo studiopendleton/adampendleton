@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "bun run build && wrangler deploy",
+    "deploy:preview": "PUBLIC_SITE_URL=https://adampendleton.net PUBLIC_NOINDEX=true bun run build && wrangler deploy",
     "worker:preview": "bun run build && wrangler dev",
     "check": "astro check",
     "sanity:dev": "sanity dev",

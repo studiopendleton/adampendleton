@@ -8,8 +8,9 @@ type Props = {
 };
 
 const { title = 'Adam Pendleton', settings } = Astro.props;
-const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
-const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://adampendleton.net';
+// Preview builds stay out of search until cutover sets PUBLIC_NOINDEX=false.
+const noindex = import.meta.env.PUBLIC_NOINDEX !== 'false';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const cssVariables = [
   `--body-color: ${settings.bodyTextColor}`,
@@ -30,7 +31,7 @@ const cssVariables = [
 <html lang="en" style={cssVariables}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content="Adam Pendleton" />

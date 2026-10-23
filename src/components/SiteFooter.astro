@@ -1,0 +1,11 @@
+---
+type Props = {
+  html: string;
+};
+
+const { html } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="site-footer-content" set:html={html} />
+</footer>

@@ -1,7 +1,8 @@
 import { toHTML } from '@portabletext/to-html';
+import seedFile from '../sanity/seed/siteSettings.json';
 import { backgroundImageUrl } from './image';
-import { sanityClient } from './sanity';
 import { siteSettingsQuery } from './queries';
+import { sanityClient } from './sanity';
 
 export type HomeTextBlock = {
   html: string;
@@ -24,41 +25,51 @@ export type SiteSettings = {
   fontWeight: '400' | '500' | '700';
 };
 
-const fallbackSiteSettings: SiteSettings = {
-  title: 'Adam Pendleton',
-  mainText: [
-    {
-      html: '<p>Adam Pendleton, a central figure in contemporary abstract painting, is known for works that push the boundaries of the medium through a sustained engagement with process, language, and form. He extends non-linear compositional traditions that are rooted in twentieth- and twenty-first-century painting. His work, a distilled layering of gesture and fragment, is marked by a precision reminiscent of Conceptual and Minimal art. In 2008, he began to define the working method for which he is now widely recognized as Black Dada—a critical framework that explores the relationship between Blackness, abstraction, and the historical avant-gardes.</p>',
-    },
-    {
-      html: '<p>In 2024, he was honored with the Rosenthal Family Foundation Award for Painting from the American Academy of Arts and Letters.</p>',
-    },
-    {
-      html: '<p>Pendleton’s work is held in numerous public collections, including The Museum of Modern Art, New York; the Solomon R. Guggenheim Museum, New York; the Whitney Museum of American Art, New York; the Studio Museum in Harlem, New York; the Carnegie Museum of Art, Pittsburgh; the Museum of Contemporary Art Chicago; the Los Angeles County Museum of Art; the Museum of Contemporary Art San Diego; the Virginia Museum of Fine Arts, Richmond; the Montreal Museum of Fine Arts; the National Gallery of Canada, Ottawa; Tate, London; and the Pinakothek der Moderne, Munich.</p>',
-    },
-    {
-      html: '<ul><li><p><a href="https://www.nytimes.com/2021/09/10/arts/design/adam-pendleton-moma-who-is-queen.html#:~:text=%E2%80%9CWho%20Is%20Queen%3F%E2%80%9D%20at,the%20museum%2C%E2%80%9D%20he%20said." target="_blank">“Adam Pendleton is Rethinking the Museum”<br><em>New York Times </em>→</a></p></li><li><p><a href="https://www.frieze.com/article/adam-pendleton-celebrates-poetry-wildness-and-black-resistance" target="_blank">“Adam Pendleton Celebrates Poetry, Wildness, and Black Resistance”<br><em>Frieze </em>→</a></p></li><li><p><a href="https://www.nytimes.com/2024/06/07/t-magazine/adam-pendleton-pace-gallery.html" target="_blank">“Adam Pendleton Holds Our Attention”<br><em>New York Times T Magazine </em>→</a></p></li><li><p><a href="https://www.nytimes.com/2025/04/24/arts/design/adam-pendleton-hirshhorn-museum.html" target="_blank" title="In the Heart of Washington, Adam Pendleton’s Work Demands Deep Thought">“In the Heart of Washington, Adam Pendleton’s Work Demands Deep Thought”<em><br>New York Times </em>→</a></p></li></ul>',
-    },
-  ],
-  frameHeight: 100,
-  footerHtml:
-    'For more information, <br class="mobile-break"><a href="mailto:info@adampendleton.net">email the studio</a>.<br> <a href="https://www.instagram.com/pendleton.adam/">IG</a>',
-  desktopBackgroundImage: '/images/background-desktop.jpg',
-  mobileBackgroundImage: '/images/background-mobile.jpg',
-  backgroundPosition: 'top',
-  bodyTextColor: '#232323',
-  backgroundColor: '#ffffff',
-  fontSize: '3rem',
-  mobileFontSize: 0.5,
-  blend: true,
-  font: 'ABCMonumentGrotesk',
-  fontWeight: '400',
+type PortableTextSpan = {
+  _type?: string;
+  _key?: string;
+  text?: string;
+  marks?: string[];
 };
 
+type PortableTextBlock = {
+  _type: string;
+  _key?: string;
+  style?: string;
+  listItem?: string;
+  level?: number;
+  markDefs?: { _key: string; _type: string; href?: string }[];
+  children?: PortableTextSpan[];
+};
+
+type SeedDocument = {
+  title: string;
+  mainText: { content?: PortableTextBlock[] }[];
+  frameHeight: number;
+  footerText: PortableTextBlock[];
+  backgroundPosition: SiteSettings['backgroundPosition'];
+  bodyTextColor: string;
+  backgroundColor: string;
+  fontSize: string;
+  mobileFontSize: number;
+  blend: boolean;
+  font: string;
+  fontWeight?: string;
+};
+
+const seed = seedFile as SeedDocument;
+
+const localBackgrounds = {
+  desktopBackgroundImage: '/images/background-desktop.jpg',
+  mobileBackgroundImage: '/images/background-mobile.jpg',
+} as const;
+
 export async function getSiteSettings(): Promise<SiteSettings> {
+  const fallback = settingsFromSeed();
+
   try {
     const settings = await sanityClient.fetch(siteSettingsQuery);
-    if (!settings) return fallbackSiteSettings;
+    if (!settings) return fallback;
 
     const mainText =
       settings.mainText
@@ -66,61 +77,108 @@ export async function getSiteSettings(): Promise<SiteSettings> {
         .filter((block) => block.html.length > 0) ?? [];
 
     const footerFromPt = normalizeFooterHtml(portableTextToHtml(settings.footerText));
+    const font = settings.font ?? fallback.font;
 
     return {
-      title: settings.title ?? fallbackSiteSettings.title,
-      frameHeight: settings.frameHeight ?? fallbackSiteSettings.frameHeight,
+      title: settings.title ?? fallback.title,
+      frameHeight: settings.frameHeight ?? fallback.frameHeight,
       backgroundPosition:
         (settings.backgroundPosition as SiteSettings['backgroundPosition']) ??
-        fallbackSiteSettings.backgroundPosition,
-      bodyTextColor: settings.bodyTextColor ?? fallbackSiteSettings.bodyTextColor,
-      backgroundColor: settings.backgroundColor ?? fallbackSiteSettings.backgroundColor,
-      fontSize: settings.fontSize ?? fallbackSiteSettings.fontSize,
-      mobileFontSize: settings.mobileFontSize ?? fallbackSiteSettings.mobileFontSize,
-      blend: settings.blend ?? fallbackSiteSettings.blend,
-      font: settings.font ?? fallbackSiteSettings.font,
-      fontWeight: normalizeFontWeight(settings.fontWeight),
-      mainText: mainText.length > 0 ? mainText : fallbackSiteSettings.mainText,
-      footerHtml: footerFromPt || fallbackSiteSettings.footerHtml,
+        fallback.backgroundPosition,
+      bodyTextColor: settings.bodyTextColor ?? fallback.bodyTextColor,
+      backgroundColor: settings.backgroundColor ?? fallback.backgroundColor,
+      fontSize: settings.fontSize ?? fallback.fontSize,
+      mobileFontSize: settings.mobileFontSize ?? fallback.mobileFontSize,
+      blend: settings.blend ?? fallback.blend,
+      font,
+      fontWeight: fontWeightFor(font, settings.fontWeight),
+      mainText: mainText.length > 0 ? mainText : fallback.mainText,
+      footerHtml: footerFromPt || fallback.footerHtml,
       desktopBackgroundImage:
-        backgroundImageUrl(settings.desktopBackgroundImage) ??
-        fallbackSiteSettings.desktopBackgroundImage,
+        backgroundImageUrl(settings.desktopBackgroundImage) ?? fallback.desktopBackgroundImage,
       mobileBackgroundImage:
-        backgroundImageUrl(settings.mobileBackgroundImage) ??
-        fallbackSiteSettings.mobileBackgroundImage,
+        backgroundImageUrl(settings.mobileBackgroundImage) ?? fallback.mobileBackgroundImage,
     };
   } catch {
-    return fallbackSiteSettings;
+    return fallback;
   }
 }
 
-function normalizeFontWeight(value?: string | null): SiteSettings['fontWeight'] {
+function settingsFromSeed(): SiteSettings {
+  const mainText = seed.mainText
+    .map((block) => ({ html: portableTextToHtml(block.content) }))
+    .filter((block) => block.html.length > 0);
+
+  return {
+    title: seed.title,
+    mainText,
+    frameHeight: seed.frameHeight,
+    footerHtml: normalizeFooterHtml(portableTextToHtml(seed.footerText)),
+    ...localBackgrounds,
+    backgroundPosition: seed.backgroundPosition,
+    bodyTextColor: seed.bodyTextColor,
+    backgroundColor: seed.backgroundColor,
+    fontSize: seed.fontSize,
+    mobileFontSize: seed.mobileFontSize,
+    blend: seed.blend,
+    font: seed.font,
+    fontWeight: fontWeightFor(seed.font, seed.fontWeight),
+  };
+}
+
+function fontWeightFor(font: string, value?: string | null): SiteSettings['fontWeight'] {
+  if (font !== 'ABCMonumentGrotesk') return '400';
   if (value === '400' || value === '500' || value === '700') return value;
-  return fallbackSiteSettings.fontWeight;
+  return '400';
 }
 
 function normalizeFooterHtml(html: string): string {
   if (!html) return '';
 
-  // PT hard breaks become <br>; first break before the email link stays mobile-only.
-  return html.replace(
-    /(For more information,\s*)<br\s*\/?>/i,
-    '$1<br class="mobile-break">',
-  );
+  // Portable Text hard breaks become <br/>. The live footer hides the break
+  // after "For more information," and the break after the email sentence on
+  // desktop, and keeps one always-visible break before the Instagram link.
+  return html
+    .replace(/(For more information,\s*)<br\s*\/?>/i, '$1<br class="mobile-break">')
+    .replace(/(<\/a>\.\s*)<br\s*\/?>(\s*<br\s*\/?>)/i, '$1<br class="mobile-break">$2');
 }
 
-function portableTextToHtml(value?: unknown[] | null): string {
+function portableTextToHtml(value?: PortableTextBlock[] | null): string {
   if (!value?.length) return '';
 
   return toHTML(value as Parameters<typeof toHTML>[0], {
     components: {
+      listItem: {
+        bullet: ({ children }) => `<li><p>${children}</p></li>`,
+        number: ({ children }) => `<li><p>${children}</p></li>`,
+      },
       marks: {
-        link: ({ children, value }) => {
-          const href = typeof value?.href === 'string' ? value.href : '#';
-          const target = href.startsWith('http') ? ' target="_blank" rel="noreferrer"' : '';
-          return `<a href="${href}"${target}>${children}</a>`;
+        link: ({ children, value: link }) => {
+          const href = typeof link?.href === 'string' ? link.href : '#';
+          const attrs = opensInNewTab(href) ? ' target="_blank" rel="noopener noreferrer"' : '';
+          return `<a href="${escapeAttribute(href)}"${attrs}>${children}</a>`;
         },
       },
     },
   });
+}
+
+function opensInNewTab(href: string): boolean {
+  if (!href.startsWith('http://') && !href.startsWith('https://')) return false;
+
+  try {
+    const host = new URL(href).hostname.replace(/^www\./, '');
+    // The live footer Instagram link stays in the same tab. Press links do not.
+    return host !== 'instagram.com';
+  } catch {
+    return true;
+  }
+}
+
+function escapeAttribute(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
 }

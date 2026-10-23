@@ -207,6 +207,65 @@ For the first Astro version, `imagePage`, `galleryImage`, and `videoPage` are op
   - Local Wrangler preview served `/` as `200 OK` and missing routes as `404 Not Found`.
 - Sanity CLI is authenticated as `jason@adampendleton.net` via Google and has administrator access to project `tftrnrna`.
 
+## Build And Compare Status
+
+Checked against the live Kirby site on 2026-10-23 (`https://adampendleton.net` and `https://www.adampendleton.net`).
+
+- `www` and the apex serve the same homepage. The only byte difference is Kirby’s obfuscated `mailto:` encoding.
+- Public routes today: `/` (homepage), `/image` (still one Flickity cell), `/video` (404), `/panel` (redirects to login). No `robots.txt` or `sitemap.xml`.
+- `/image` and `/video` stay out of v1, as planned. The live image page still has a single slide, `apn-install-4b-ap_l.jpg`, captioned “Installation view of ‘Adam Pendleton: Begin Again’ at David Kordansky Gallery, Los Angeles (2020)”.
+- Desktop and mobile background JPEGs on the droplet are byte-identical to `public/images/background-desktop.jpg` and `public/images/background-mobile.jpg` (SHA-256 prefixes `22ec4b67886ce8e4` and `ecc8d81c4df4a8f2`). Sanity already has recompressed copies of those same dimensions. No image replacement was required.
+- Appearance that still matches June and the live site: `frameHeight` 100, background position `top`, body color `rgb(35, 35, 35)`, hover/selection color `#ffffff`, desktop `3rem`, mobile scale `0.5`, blend multiply.
+- The live font is still `UnicaMedium`. A July Studio edit had switched the Sanity document to ABC Monument Grotesk Medium. The seed and published document are set back to Unica Medium so the preview matches the live site. Monument Grotesk stays available in Studio.
+- Homepage sticky behavior follows the live CSS: each text block is at least `100vh`, and the paragraph or list inside it sticks at `--margin` (`1.5rem` desktop, `0.75rem` at `1024px` and below). The page matte is black, matching `home.css`. Header and footer use the same multiply blend. The footer is a row pinned to the bottom of a `100vh - margin` frame.
+- The static fallback renders `src/sanity/seed/siteSettings.json`, so a build still matches this copy if Sanity is unreachable.
+- Preview HTML noindexes unless `PUBLIC_NOINDEX=false`, and the canonical URL defaults to `https://adampendleton.net` so a `workers.dev` host does not become canonical.
+- `wrangler.jsonc` publishes Workers Static Assets to `workers.dev` only. It has no custom-domain route.
+- Local `wrangler dev` on 2026-10-23 served `/` as `200`, unknown paths as the custom `404`, and `/image` as `404` (still deferred). In Chrome, the preview matched the live homepage text and sticky layout at 1440×1000 and 390×844: four `100vh` frames, the second paragraph stuck at the margin after scrolling, and the mobile footer read “For more information,” / “email the studio.” / blank line / “IG”.
+
+### Copy changes since the June baseline
+
+Live homepage copy was edited on the droplet after the June Kirby archive. Sanity already had the new biography and shortened collections paragraph (published 2026-07-13) but still had the June press list and footer.
+
+1. Biography rewritten. It now leads with “Adam Pendleton is a leading figure in contemporary art,” mentions the Museum of Modern Art and the Hirshhorn, and says a solo exhibition at the Stedelijk Museum in Amsterdam opens in fall 2026. A non-breaking space remains before “exhibition”, and the live sentence ends with a non-breaking space.
+2. Collections paragraph shortened to MoMA, Guggenheim, Whitney, the Studio Museum in Harlem, Tate, and the Pinakothek der Moderne.
+3. Press list: “Adam Pendleton is Rethinking the Museum” (New York Times, 2021) was replaced by “Adam Pendleton Is Painting the White Cube Black” (`https://www.nytimes.com/2026/09/23/arts/design/adam-pendleton-amsterdam-artist.html`). The Frieze, T Magazine, and Hirshhorn links are unchanged.
+4. Footer markup on the live site is `For more information,` plus a mobile-only break, `email the studio`, a second mobile-only break, then a break that is always visible before `IG`. The June import had one mobile break and a space before `IG`.
+
+Not copied into v1, because they do not change the page:
+
+- The Hirshhorn link’s `title` attribute repeats the visible headline.
+- On that same link only, Kirby puts the `<br>` inside the `<em>`. The other three links, and this rebuild, put the break before the italic publication name.
+- Google Analytics tags on the droplet (`gtag.js?id=UA-147761494-1` configured as `UA-19147768-1`). Leave them off the preview. Decide which property, if either, to restore at cutover.
+- `/image` carousel and `/video`.
+
+Re-applying the checked-in seed to the published Sanity document:
+
+```sh
+bun run sanity:migrate-pt
+```
+
+That script patches `siteSettings` in dataset `production` (project `tftrnrna`). It needs a Sanity CLI login with write access, the same way the June import was run.
+
+## Preview Deploy
+
+Do not attach `adampendleton.net` and do not change DNS.
+
+From a clean shell (so a local `.env` with `PUBLIC_SITE_URL=http://localhost:4321` is overridden):
+
+```sh
+bun install
+bun run deploy:preview
+```
+
+`deploy:preview` builds with `PUBLIC_SITE_URL=https://adampendleton.net` and `PUBLIC_NOINDEX=true`, then runs `wrangler deploy`. Wrangler prints the `workers.dev` URL, which will look like `https://adampendleton.<account-subdomain>.workers.dev`. The first deploy may ask for a Cloudflare login. It does not move DNS.
+
+Local Worker preview, without deploying:
+
+```sh
+bun run worker:preview
+```
+
 ## Next Steps
 
 1. Capture the local Kirby baseline. Done 2026-06-03.
@@ -239,7 +298,20 @@ For the first Astro version, `imagePage`, `galleryImage`, and `videoPage` are op
    - Added local Astro CORS origin `http://localhost:4321`; Studio origin `http://localhost:3333` was already present.
    - Seeded the `siteSettings` singleton from the Kirby archive.
 
-6. Build and compare. Next.
-   - Recreate homepage first.
-   - Compare against the captured baseline at desktop and mobile widths.
-   - Keep the droplet live until the Cloudflare deployment matches the baseline and DNS cutover is verified.
+6. Build and compare. Done 2026-10-23.
+   - Homepage matches the live site on desktop and mobile, including sticky text, black page matte, Unica Medium, and the current biography, press list, and footer.
+   - Compared with the June baseline screenshots for behavior, then with the live site for copy. The biography, collections paragraph, and first press link have changed since June. See “Build And Compare Status”.
+   - `/image` and `/video` remain deferred.
+   - `bun run check`, `bun run build`, and a local Wrangler preview are the release checks. Keep the droplet live until the `workers.dev` preview is accepted and DNS cutover is verified.
+
+7. Cut over DNS, then retire the droplet. Not started. Jessica’s GoDaddy 2FA is required before anyone can change DNS.
+   - Registrar DNS is still delegated to `ns1.mediatemple.net` and `ns2.mediatemple.net` (GoDaddy / Media Temple). Apex and `www` are A records to the droplet `161.35.62.228`. There is no `AAAA` record.
+   - Mail must survive the move. MX is Google Workspace (`aspmx.l.google.com` and the `alt` hosts). `google-site-verification=nQ3I7f8aV9YzXRLuY16sLavpixPIvFjDHu_rYD535Jw` is the current TXT record. Re-check SPF, DKIM, and DMARC in the GoDaddy zone before editing, and copy every mail record into Cloudflare.
+   - Confirm whether `testing.adampendleton.net` is still in the zone and whether it should move or be removed.
+   - Deploy the preview with `bun run deploy:preview` and review that `workers.dev` URL on desktop and mobile. Do this before any DNS edit.
+   - In GoDaddy, after Jessica approves the 2FA prompt, either move the nameservers to Cloudflare or replace only the web A/CNAME records. Prefer moving the zone so mail and web stay in one place. Do not change MX until the new zone has the same Google records.
+   - Add `adampendleton.net` and `www.adampendleton.net` as Worker custom domains only after the zone answers from Cloudflare. Until then, `wrangler.jsonc` must not list those hostnames.
+   - Add the preview `workers.dev` origin and `https://adampendleton.net` to the Sanity CORS list. Studio origins `http://localhost:3333` and `http://localhost:4321` are already there.
+   - Production build, only when the domain is ready: `PUBLIC_SITE_URL=https://adampendleton.net PUBLIC_NOINDEX=false bun run build`, then deploy that build. Decide canonical host (`apex` or `www`) and redirect the other.
+   - Decide analytics. The droplet loads one Universal Analytics id and configures a different one. Do not copy that pair onto the new site without choosing a current property.
+   - After HTTPS, the homepage, and mail all check out on the new host, shut down the DigitalOcean droplet. Leave it running until that check is done.

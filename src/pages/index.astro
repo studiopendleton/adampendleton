@@ -1,4 +1,5 @@
 ---
+import SiteFooter from '../components/SiteFooter.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSiteSettings } from '../lib/siteSettings';
 
@@ -12,7 +13,5 @@ const settings = await getSiteSettings();
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="site-footer-content" set:html={settings.footerHtml} />
-  </footer>
+  <SiteFooter html={settings.footerHtml} />
 </BaseLayout>

@@ -18,6 +18,7 @@ type SeedSiteSettings = {
   mobileFontSize: number;
   blend: boolean;
   font: string;
+  fontWeight?: string;
 };
 
 async function migrateSiteSettingsToPortableText() {
@@ -46,11 +47,12 @@ async function migrateSiteSettingsToPortableText() {
       mobileFontSize: seed.mobileFontSize,
       blend: seed.blend,
       font: seed.font,
+      fontWeight: seed.fontWeight ?? '400',
     })
     .unset(['footerHtml'])
     .commit();
 
-  console.log('Patched siteSettings to Portable Text and cleared legacy HTML fields.');
+  console.log('Patched published siteSettings from src/sanity/seed/siteSettings.json.');
 }
 
 migrateSiteSettingsToPortableText().catch((error) => {

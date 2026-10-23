@@ -17,7 +17,7 @@
               "_type": "span",
               "_key": "bio1s",
               "marks": [],
-              "text": "Adam Pendleton, a central figure in contemporary abstract painting, is known for works that push the boundaries of the medium through a sustained engagement with process, language, and form. He extends non-linear compositional traditions that are rooted in twentieth- and twenty-first-century painting. His work, a distilled layering of gesture and fragment, is marked by a precision reminiscent of Conceptual and Minimal art. In 2008, he began to define the working method for which he is now widely recognized as Black Dada—a critical framework that explores the relationship between Blackness, abstraction, and the historical avant-gardes."
+              "text": "Adam Pendleton is a leading figure in contemporary art. Working primarily as a painter, his work has redefined the boundaries of abstraction through a sustained engagement with process, language, and conceptual form. In 2008, he began to define the working method for which he is now widely recognized as Black Dada—a critical framework that explores the relationship between Blackness, abstraction, and avant-garde movements. His work has been featured in solo exhibitions at leading museums and galleries around the world, including the Museum of Modern Art in New York and the Hirshhorn Museum and Sculpture Garden in Washington, DC. In the fall of 2026, he will be the subject of a solo\u00a0exhibition at the Stedelijk Museum in Amsterdam.\u00a0"
             }
           ]
         }
@@ -57,7 +57,7 @@
               "_type": "span",
               "_key": "coll1s",
               "marks": [],
-              "text": "Pendleton’s work is held in numerous public collections, including The Museum of Modern Art, New York; the Solomon R. Guggenheim Museum, New York; the Whitney Museum of American Art, New York; the Studio Museum in Harlem, New York; the Carnegie Museum of Art, Pittsburgh; the Museum of Contemporary Art Chicago; the Los Angeles County Museum of Art; the Museum of Contemporary Art San Diego; the Virginia Museum of Fine Arts, Richmond; the Montreal Museum of Fine Arts; the National Gallery of Canada, Ottawa; Tate, London; and the Pinakothek der Moderne, Munich."
+              "text": "Pendleton’s work is held in major public collections worldwide, including the Museum of Modern Art; the Solomon R. Guggenheim Museum; the Whitney Museum of American Art; the Studio Museum in Harlem; Tate; and the Pinakothek der Moderne, among many others."
             }
           ]
         }
@@ -77,7 +77,7 @@
             {
               "_type": "link",
               "_key": "nytQueen",
-              "href": "https://www.nytimes.com/2021/09/10/arts/design/adam-pendleton-moma-who-is-queen.html#:~:text=%E2%80%9CWho%20Is%20Queen%3F%E2%80%9D%20at,the%20museum%2C%E2%80%9D%20he%20said."
+              "href": "https://www.nytimes.com/2026/09/23/arts/design/adam-pendleton-amsterdam-artist.html"
             }
           ],
           "children": [
@@ -87,7 +87,7 @@
               "marks": [
                 "nytQueen"
               ],
-              "text": "“Adam Pendleton is Rethinking the Museum”"
+              "text": "“Adam Pendleton Is Painting the White Cube Black”"
             },
             {
               "_type": "span",
@@ -313,15 +313,15 @@
         },
         {
           "_type": "span",
-          "_key": "footer1ig",
+          "_key": "footer1mobile2",
           "marks": [],
           "text": "\n"
         },
         {
           "_type": "span",
-          "_key": "footer1d",
+          "_key": "footer1ig",
           "marks": [],
-          "text": " "
+          "text": "\n"
         },
         {
           "_type": "span",
@@ -340,6 +340,6 @@
   "fontSize": "3rem",
   "mobileFontSize": 0.5,
   "blend": true,
-  "font": "ABCMonumentGrotesk",
+  "font": "UnicaMedium",
   "fontWeight": "400"
 }
