@@ -216,7 +216,7 @@ Checked against the live Kirby site on 2026-10-23 (`https://adampendleton.net` a
 - `/image` and `/video` stay out of v1, as planned. The live image page still has a single slide, `apn-install-4b-ap_l.jpg`, captioned “Installation view of ‘Adam Pendleton: Begin Again’ at David Kordansky Gallery, Los Angeles (2020)”.
 - Desktop and mobile background JPEGs on the droplet are byte-identical to `public/images/background-desktop.jpg` and `public/images/background-mobile.jpg` (SHA-256 prefixes `22ec4b67886ce8e4` and `ecc8d81c4df4a8f2`). Sanity already has recompressed copies of those same dimensions. No image replacement was required.
 - Appearance that still matches June and the live site: `frameHeight` 100, background position `top`, body color `rgb(35, 35, 35)`, hover/selection color `#ffffff`, desktop `3rem`, mobile scale `0.5`, blend multiply.
-- The live font is still `UnicaMedium`. A July Studio edit had switched the Sanity document to ABC Monument Grotesk Medium. The seed and published document are set back to Unica Medium so the preview matches the live site. Monument Grotesk stays available in Studio.
+- The live Kirby site still uses `UnicaMedium`. Jason chose ABC Monument Grotesk Medium for the rebuild. The seed, the static fallback, the Studio default, and the published `siteSettings` document use `font: ABCMonumentGrotesk` and `fontWeight: 500`. Unica remains available in Studio.
 - Homepage sticky behavior follows the live CSS: each text block is at least `100vh`, and the paragraph or list inside it sticks at `--margin` (`1.5rem` desktop, `0.75rem` at `1024px` and below). The page matte is black, matching `home.css`. Header and footer use the same multiply blend. The footer is a row pinned to the bottom of a `100vh - margin` frame.
 - The static fallback renders `src/sanity/seed/siteSettings.json`, so a build still matches this copy if Sanity is unreachable.
 - Preview HTML noindexes unless `PUBLIC_NOINDEX=false`, and the canonical URL defaults to `https://adampendleton.net` so a `workers.dev` host does not become canonical.
@@ -299,7 +299,7 @@ bun run worker:preview
    - Seeded the `siteSettings` singleton from the Kirby archive.
 
 6. Build and compare. Done 2026-10-23.
-   - Homepage matches the live site on desktop and mobile, including sticky text, black page matte, Unica Medium, and the current biography, press list, and footer.
+   - Homepage matches the live site on desktop and mobile, including sticky text, black page matte, and the current biography, press list, and footer. The preview font is ABC Monument Grotesk Medium, not the live site’s Unica Medium.
    - Compared with the June baseline screenshots for behavior, then with the live site for copy. The biography, collections paragraph, and first press link have changed since June. See “Build And Compare Status”.
    - `/image` and `/video` remain deferred.
    - `bun run check`, `bun run build`, and a local Wrangler preview are the release checks. Keep the droplet live until the `workers.dev` preview is accepted and DNS cutover is verified.

@@ -155,7 +155,7 @@ export const siteSettings = defineType({
         list: monumentFontWeights.map(({ title, value }) => ({ title, value })),
         layout: 'radio',
       },
-      initialValue: '400',
+      initialValue: '500',
       hidden: ({ document }) => document?.font !== 'ABCMonumentGrotesk',
       validation: (rule) =>
         rule.custom((value, context) => {

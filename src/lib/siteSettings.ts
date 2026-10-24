@@ -129,7 +129,7 @@ function settingsFromSeed(): SiteSettings {
 function fontWeightFor(font: string, value?: string | null): SiteSettings['fontWeight'] {
   if (font !== 'ABCMonumentGrotesk') return '400';
   if (value === '400' || value === '500' || value === '700') return value;
-  return '400';
+  return '500';
 }
 
 function normalizeFooterHtml(html: string): string {

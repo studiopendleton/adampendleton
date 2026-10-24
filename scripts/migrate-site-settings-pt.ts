@@ -47,7 +47,7 @@ async function migrateSiteSettingsToPortableText() {
       mobileFontSize: seed.mobileFontSize,
       blend: seed.blend,
       font: seed.font,
-      fontWeight: seed.fontWeight ?? '400',
+      fontWeight: seed.fontWeight ?? '500',
     })
     .unset(['footerHtml'])
     .commit();
