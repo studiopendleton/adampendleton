@@ -55,43 +55,73 @@ const fallbackSiteSettings: SiteSettings = {
   fontWeight: '400',
 };
 
+type RawTextBlock = {
+  content?: unknown[] | null;
+};
+
+type RawSettings = {
+  title?: string | null;
+  mainText?: RawTextBlock[] | null;
+  frameHeight?: number | null;
+  footerText?: unknown[] | null;
+  desktopBackgroundImage?: Parameters<typeof backgroundImageUrl>[0];
+  mobileBackgroundImage?: Parameters<typeof backgroundImageUrl>[0];
+  backgroundPosition?: string | null;
+  bodyTextColor?: string | null;
+  backgroundColor?: string | null;
+  fontSize?: string | null;
+  mobileFontSize?: number | null;
+  blend?: boolean | null;
+  font?: string | null;
+  fontWeight?: string | null;
+};
+
+function isRawSettings(value: unknown): value is RawSettings {
+  return typeof value === 'object' && value !== null;
+}
+
+export function toSiteSettings(settings: unknown): SiteSettings {
+  if (!isRawSettings(settings)) return fallbackSiteSettings;
+
+  const mainText =
+    settings.mainText
+      ?.map((block) => ({ html: portableTextToHtml(block.content) }))
+      .filter((block) => block.html.length > 0) ?? [];
+
+  const footerFromPt = portableTextToHtml(settings.footerText);
+
+  return {
+    title: settings.title ?? fallbackSiteSettings.title,
+    frameHeight: settings.frameHeight ?? fallbackSiteSettings.frameHeight,
+    backgroundPosition:
+      (settings.backgroundPosition as SiteSettings['backgroundPosition']) ??
+      fallbackSiteSettings.backgroundPosition,
+    bodyTextColor: settings.bodyTextColor ?? fallbackSiteSettings.bodyTextColor,
+    backgroundColor: settings.backgroundColor ?? fallbackSiteSettings.backgroundColor,
+    fontSize: settings.fontSize ?? fallbackSiteSettings.fontSize,
+    mobileFontSize: settings.mobileFontSize ?? fallbackSiteSettings.mobileFontSize,
+    blend: settings.blend ?? fallbackSiteSettings.blend,
+    font: settings.font ?? fallbackSiteSettings.font,
+    fontWeight: normalizeFontWeight(settings.fontWeight),
+    mainText: mainText.length > 0 ? mainText : fallbackSiteSettings.mainText,
+    footerHtml: footerFromPt || fallbackSiteSettings.footerHtml,
+    desktopBackgroundImage:
+      backgroundImageUrl(settings.desktopBackgroundImage) ??
+      fallbackSiteSettings.desktopBackgroundImage,
+    mobileBackgroundImage:
+      backgroundImageUrl(settings.mobileBackgroundImage) ??
+      fallbackSiteSettings.mobileBackgroundImage,
+  };
+}
+
 export async function getSiteSettings(): Promise<SiteSettings> {
+  let settings: unknown;
   try {
-    const settings = await sanityClient.fetch(siteSettingsQuery);
-    if (!settings) return fallbackSiteSettings;
-
-    const mainText =
-      settings.mainText
-        ?.map((block) => ({ html: portableTextToHtml(block.content) }))
-        .filter((block) => block.html.length > 0) ?? [];
-
-    const footerFromPt = normalizeFooterHtml(portableTextToHtml(settings.footerText));
-
-    return {
-      title: settings.title ?? fallbackSiteSettings.title,
-      frameHeight: settings.frameHeight ?? fallbackSiteSettings.frameHeight,
-      backgroundPosition:
-        (settings.backgroundPosition as SiteSettings['backgroundPosition']) ??
-        fallbackSiteSettings.backgroundPosition,
-      bodyTextColor: settings.bodyTextColor ?? fallbackSiteSettings.bodyTextColor,
-      backgroundColor: settings.backgroundColor ?? fallbackSiteSettings.backgroundColor,
-      fontSize: settings.fontSize ?? fallbackSiteSettings.fontSize,
-      mobileFontSize: settings.mobileFontSize ?? fallbackSiteSettings.mobileFontSize,
-      blend: settings.blend ?? fallbackSiteSettings.blend,
-      font: settings.font ?? fallbackSiteSettings.font,
-      fontWeight: normalizeFontWeight(settings.fontWeight),
-      mainText: mainText.length > 0 ? mainText : fallbackSiteSettings.mainText,
-      footerHtml: footerFromPt || fallbackSiteSettings.footerHtml,
-      desktopBackgroundImage:
-        backgroundImageUrl(settings.desktopBackgroundImage) ??
-        fallbackSiteSettings.desktopBackgroundImage,
-      mobileBackgroundImage:
-        backgroundImageUrl(settings.mobileBackgroundImage) ??
-        fallbackSiteSettings.mobileBackgroundImage,
-    };
+    settings = await sanityClient.fetch(siteSettingsQuery);
   } catch {
     return fallbackSiteSettings;
   }
+  return toSiteSettings(settings);
 }
 
 function normalizeFontWeight(value?: string | null): SiteSettings['fontWeight'] {
@@ -99,24 +129,41 @@ function normalizeFontWeight(value?: string | null): SiteSettings['fontWeight'] 
   return fallbackSiteSettings.fontWeight;
 }
 
-function normalizeFooterHtml(html: string): string {
-  if (!html) return '';
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
 
-  // PT hard breaks become <br>; first break before the email link stays mobile-only.
-  return html.replace(
-    /(For more information,\s*)<br\s*\/?>/i,
-    '$1<br class="mobile-break">',
-  );
+function isMobileOnlyBreak(child: Record<string, unknown>): boolean {
+  const key = typeof child._key === 'string' ? child._key : '';
+  return child._type === 'span' && child.text === '\n' && key.includes('mobile');
+}
+
+function markMobileBreaks(value: unknown[]): unknown[] {
+  return value.map((node) => {
+    if (!isRecord(node) || !Array.isArray(node.children)) return node;
+    return {
+      ...node,
+      children: node.children.map((child) => {
+        if (!isRecord(child) || !isMobileOnlyBreak(child)) return child;
+        return { _type: 'mobileBreak', _key: child._key };
+      }),
+    };
+  });
 }
 
 function portableTextToHtml(value?: unknown[] | null): string {
   if (!value?.length) return '';
 
-  return toHTML(value as Parameters<typeof toHTML>[0], {
+  return toHTML(markMobileBreaks(value) as Parameters<typeof toHTML>[0], {
     components: {
+      types: {
+        mobileBreak: () => '<br class="mobile-break">',
+      },
+      listItem: ({ children }) => `<li><p>${children}</p></li>`,
+      hardBreak: () => '<br>',
       marks: {
-        link: ({ children, value }) => {
-          const href = typeof value?.href === 'string' ? value.href : '#';
+        link: ({ children, value: link }) => {
+          const href = typeof link?.href === 'string' ? link.href : '#';
           const target = href.startsWith('http') ? ' target="_blank" rel="noreferrer"' : '';
           return `<a href="${href}"${target}>${children}</a>`;
         },

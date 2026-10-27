@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { canonicalUrl, indexingFromFlag } from '../lib/publicSite';
 import type { SiteSettings } from '../lib/siteSettings';
 
 type Props = {
@@ -8,9 +9,8 @@ type Props = {
 };
 
 const { title = 'Adam Pendleton', settings } = Astro.props;
-const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321';
-const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
-const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const canonical = canonicalUrl(Astro.url.pathname, import.meta.env.PUBLIC_SITE_URL);
+const noindex = indexingFromFlag(import.meta.env.PUBLIC_NOINDEX) === 'noindex';
 const cssVariables = [
   `--body-color: ${settings.bodyTextColor}`,
   `--background-color: ${settings.backgroundColor}`,
@@ -34,7 +34,7 @@ const cssVariables = [
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content="Adam Pendleton" />
-    <link rel="canonical" href={canonicalUrl} />
+    <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
   </head>
   <body>
