@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import { iconLinkTags } from '../lib/siteIcon';
 import { canonicalUrl, indexingFromFlag } from '../lib/publicSite';
 import type { SiteSettings } from '../lib/siteSettings';
 
@@ -37,9 +36,9 @@ const cssVariables = [
     <meta name="description" content="Adam Pendleton" />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    {iconLinkTags().map((link) => (
-      <link rel={link.rel} href={link.href} type={link.type} sizes={link.sizes} />
-    ))}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
   </head>
   <body>
     <slot />
