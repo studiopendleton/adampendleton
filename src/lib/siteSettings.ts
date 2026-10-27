@@ -55,10 +55,34 @@ const fallbackSiteSettings: SiteSettings = {
   fontWeight: '400',
 };
 
-export async function getSiteSettings(): Promise<SiteSettings> {
+type RawTextBlock = {
+  content?: unknown[] | null;
+};
+
+type RawSettings = {
+  title?: string | null;
+  mainText?: RawTextBlock[] | null;
+  frameHeight?: number | null;
+  footerText?: unknown[] | null;
+  desktopBackgroundImage?: Parameters<typeof backgroundImageUrl>[0];
+  mobileBackgroundImage?: Parameters<typeof backgroundImageUrl>[0];
+  backgroundPosition?: string | null;
+  bodyTextColor?: string | null;
+  backgroundColor?: string | null;
+  fontSize?: string | null;
+  mobileFontSize?: number | null;
+  blend?: boolean | null;
+  font?: string | null;
+  fontWeight?: string | null;
+};
+
+function isRawSettings(value: unknown): value is RawSettings {
+  return typeof value === 'object' && value !== null;
+}
+
+export function toSiteSettings(settings: unknown): SiteSettings {
   try {
-    const settings = await sanityClient.fetch(siteSettingsQuery);
-    if (!settings) return fallbackSiteSettings;
+    if (!isRawSettings(settings)) return fallbackSiteSettings;
 
     const mainText =
       settings.mainText
@@ -89,6 +113,15 @@ export async function getSiteSettings(): Promise<SiteSettings> {
         backgroundImageUrl(settings.mobileBackgroundImage) ??
         fallbackSiteSettings.mobileBackgroundImage,
     };
+  } catch {
+    return fallbackSiteSettings;
+  }
+}
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  try {
+    const settings = await sanityClient.fetch(siteSettingsQuery);
+    return toSiteSettings(settings);
   } catch {
     return fallbackSiteSettings;
   }
