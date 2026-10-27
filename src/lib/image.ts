@@ -15,5 +15,9 @@ export function backgroundImageUrl(
     return undefined;
   }
 
-  return urlFor(source).width(width).auto('format').url();
+  try {
+    return urlFor(source).width(width).auto('format').url();
+  } catch {
+    return undefined;
+  }
 }
