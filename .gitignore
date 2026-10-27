@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# verification evidence
+artifacts/
+
 # generated types
 .astro/
 .wrangler/
