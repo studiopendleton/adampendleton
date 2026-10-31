@@ -21,9 +21,12 @@ The old Kirby `/image` carousel and `/video` pages were not rebuilt. `/image` re
 
 ### Fallbacks
 
-If Sanity can't be reached, or a field is empty, the build uses `fallbackSiteSettings` in `src/lib/siteSettings.ts` and the images in `public/images/`. Each field falls back separately, so a bad background image doesn't throw away CMS copy. `src/lib/siteSettings.test.mjs` covers this.
+Sanity is the source of truth. `fallbackSiteSettings` in `src/lib/siteSettings.ts` is a safety net, not a second copy to maintain:
 
-The fallback copy is the June 2026 Kirby text (“a central figure…”), not the current published copy (“a leading figure…”). A build that silently falls back will show outdated text. The `cms copy` check in `scripts/verify-preview.mjs` exists to catch that.
+- **Sanity unreachable:** a production build (`astro build`) fails, and Cloudflare keeps the last good deploy live. Only `astro dev` falls back to the static settings, so local work can continue offline.
+- **A field is empty or invalid:** that field alone uses the fallback value. For background images, that means `public/images/background-*.jpg`. CMS copy is kept. `src/lib/siteSettings.test.mjs` covers this.
+
+The fallback copy was copied from the published document on 2026-10-31. If the published copy changes, the fallback doesn't need to change with it.
 
 ## Sanity
 
@@ -44,12 +47,7 @@ The fallback copy is the June 2026 Kirby text (“a central figure…”), not t
 - External links get `target="_blank" rel="noreferrer"`.
 - A `\n` span whose `_key` contains `mobile` renders as `<br class="mobile-break">`, which only shows at `1024px` and below. Any other `\n` is a normal `<br>`. The footer depends on this key convention, so keep the keys when editing footer breaks.
 
-### Scripts
-
-- `scripts/upload-background-images.ts` (`bun run sanity:upload-backgrounds`) uploads `public/images/background-*.jpg` to Sanity and sets both image fields.
-- `scripts/migrate-site-settings-pt.ts` (`bun run sanity:migrate-pt`) overwrites the published `siteSettings` copy and appearance with `src/sanity/seed/siteSettings.json`.
-
-**Do not run `sanity:migrate-pt` as-is.** The seed still holds the June copy. Running it would overwrite the live biography, collections, press list, and footer with outdated text. Update the seed from the published document first, or retire the script.
+Edit content in Studio, not with scripts. Every write to a published document in `production` triggers a production deploy through the webhook.
 
 ## Making Changes
 
@@ -59,8 +57,6 @@ The fallback copy is the June 2026 Kirby text (“a central figure…”), not t
 - Homepage markup: `src/pages/index.astro`.
 - New editable field: add it to the schema, the GROQ query, `RawSettings`/`SiteSettings`/`toSiteSettings`, and the fallback, then run `sanity:typegen` and `sanity:schema-deploy`.
 - New font: add the file to `public/fonts/`, add an `@font-face` in `global.css`, and add it to `registeredFonts` in the schema.
-
-`public/fonts/` also holds unused fonts left over from Kirby (Grotesque MT, Recta, Univers, Venus, Gerstner, Lars, Folio) and a `fonts.css` that nothing loads.
 
 ## Deployment
 

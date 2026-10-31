@@ -1,6 +1,6 @@
 # Adam Pendleton
 
-Static Astro site for `adampendleton.net`, with homepage content edited in Sanity. It replaced the Kirby/PHP site, which is archived at `/Users/scozu/Developer/adampendleton-kirby`.
+Static Astro site for `adampendleton.net`, with homepage content edited in Sanity. It replaced a Kirby/PHP site on a DigitalOcean droplet. The Kirby code is in this repo's git history up to `c05c14b`.
 
 The site is live on Cloudflare. See `docs/SITE_GUIDE.md` for how it works and `docs/MIGRATION_PLAN.md` for migration history and open items.
 
@@ -41,11 +41,11 @@ bun run deploy           # production worker "adampendleton"
 bun run deploy:preview   # noindex worker "adampendleton-preview" on workers.dev
 ```
 
-A manual production deploy must be built with `PUBLIC_NOINDEX` unset or `false`. Astro reads `.env`, so a local `.env` copied from `.env.example` (which sets `PUBLIC_NOINDEX=true`) will ship a noindexed production site.
+A manual production deploy must be built with `PUBLIC_NOINDEX` unset or `false`. Astro reads `.env`, so check that a local `.env` doesn't set `PUBLIC_NOINDEX=true`. A production build fails if Sanity can't be reached, so a failed build never replaces the live site with fallback copy.
 
 ## Environment
 
-Copy `.env.example` to `.env` for local values. Every variable has a working default in code, so `.env` is optional. Do not commit private tokens.
+`.env.example` lists the production values. Every variable has the same default in code, so `.env` is optional. Do not commit private tokens.
 
 | Variable | Default | Purpose |
 | --- | --- | --- |

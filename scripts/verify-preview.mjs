@@ -34,7 +34,7 @@ record(
 record('robots header', robotsHeader.toLowerCase().includes('noindex'), robotsHeader || 'missing');
 record(
   'cms copy',
-  home.body.includes('leading figure') && !home.body.includes('central figure'),
+  home.body.includes('leading figure'),
   'homepage uses published copy',
 );
 record('press list', home.body.includes('<li><p><a href="https://www.nytimes.com/'), 'press list markup');

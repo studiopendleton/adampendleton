@@ -126,7 +126,7 @@ describe('toSiteSettings', () => {
   it('uses the static homepage when Sanity has no document', () => {
     const settings = toSiteSettings(null);
     const html = settings.mainText.map((block) => block.html).join('\n');
-    assert.match(html, /central figure/);
+    assert.match(html, /leading figure/);
     assert.equal(settings.title, 'Adam Pendleton');
     assert.equal(settings.desktopBackgroundImage, '/images/background-desktop.jpg');
   });

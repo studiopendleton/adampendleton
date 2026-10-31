@@ -48,7 +48,7 @@ Open `/` for the homepage. Open `/missing-page` for the 404 page. Open `/robots.
 
 ## Evidence
 
-`artifacts/verify/preview-report.json` records each check, the origin, and whether the run passed. The homepage proof is the status, the canonical href `https://adampendleton.net/`, the robots meta, the `X-Robots-Tag` header, published copy (`leading figure`), press-list markup, and two mobile breaks. The 404 proof is status 404, the words `Page not found`, the same robots header, and a canonical host of `https://adampendleton.net`. `robots.txt` must contain `Disallow: /`.
+`artifacts/verify/preview-report.json` records each check, the origin, and whether the run passed. The homepage proof is the status, the canonical href `https://adampendleton.net/`, the robots meta, the `X-Robots-Tag` header, published copy (`leading figure`), press-list markup, and two mobile breaks. A production build stops if Sanity can't be reached, so a served homepage always has fetched copy. The 404 proof is status 404, the words `Page not found`, the same robots header, and a canonical host of `https://adampendleton.net`. `robots.txt` must contain `Disallow: /`.
 
 Unit-test output is the proof for fallback branches. Do not treat a green `verify:preview` as proof of those branches. The published document hides them.
 
