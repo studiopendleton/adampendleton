@@ -1,185 +1,96 @@
 # Site Guide
 
-This repo is a Kirby CMS site for `adampendleton.net`. Kirby is a file-based PHP CMS: PHP templates and CSS/JS define the site behavior, while editable page content, uploaded media metadata, users, sessions, and the Kirby license live in local files on the server.
+`adampendleton.net` is a static Astro site. Pages are built once from Sanity content and served by Cloudflare Workers Static Assets. There is no server code, login, or client-side JavaScript on the public site.
 
-## What This Repo Contains
+## Routes
 
-- `index.php` boots Kirby and renders the current request.
-- `kirby/` is the vendored Kirby CMS core. This checkout contains Kirby `4.4.1`, which requires PHP `8.1`, `8.2`, or `8.3`.
-- `site/config/config.php` is the site-level Kirby config.
-- `site/templates/` contains page templates.
-- `site/snippets/` contains reusable PHP fragments used by templates.
-- `site/blueprints/` controls the Kirby Panel editing UI and defines available fields.
-- `site/plugins/` contains Kirby Panel/site plugins:
-  - `kirby-colors`
-  - `kirby-plugin-image-crop-field`
-  - `kirby-fingerprint-master`
-  - `k3-whenquery`
-- `assets/css/`, `assets/js/`, `assets/fonts/`, and `assets/svg/` are public front-end assets.
+- `/`: `src/pages/index.astro`. The homepage text blocks and footer.
+- `/robots.txt`: `src/pages/robots.txt.ts`. `Allow: /` normally, `Disallow: /` when `PUBLIC_NOINDEX=true`.
+- Any other path: `src/pages/404.astro`, served with status 404 through `not_found_handling: "404-page"` in the Wrangler config.
 
-## What Is Not In Git
-
-The clone is not a complete copy of the live site state. `.gitignore` excludes:
-
-- `content/*`: Kirby page content, site fields, file metadata, and uploaded content references.
-- `/media/*`: generated public media cache.
-- `/site/accounts/*`: Kirby Panel users.
-- `/site/sessions/*`: sessions.
-- `/site/cache/*`: cache.
-- `/site/config/.license`: Kirby license.
-
-That is correct from a security and repo-size perspective, but it means a fresh clone cannot accurately render the real site until you also get a local copy of the server's `content/` folder and required uploaded files.
+The old Kirby `/image` carousel and `/video` pages were not rebuilt. `/image` returns 404 on purpose.
 
 ## Rendering Flow
 
-1. A browser request hits `index.php`.
-2. Kirby reads the matching page from `content/`.
-3. Kirby chooses a template based on the page template/content file.
-4. The template includes shared snippets and outputs HTML.
-5. `site/snippets/header.php` loads:
-   - `assets/fonts/fonts.css`
-   - `assets/css/global.css`
-   - the matching auto stylesheet, e.g. `assets/css/templates/image.css`
-   - jQuery from CDN
-   - the matching auto JS file, e.g. `assets/js/templates/image.js`
-6. `site/snippets/footer.php` closes the page and prints Panel-managed footer text.
+1. `astro build` runs each page.
+2. `getSiteSettings()` in `src/lib/siteSettings.ts` fetches the `siteSettings` document with the GROQ query in `src/lib/queries.ts`.
+3. `toSiteSettings()` converts it into plain values. Portable Text becomes HTML (see "Portable Text Rendering"). Background images become Sanity CDN URLs through `src/lib/image.ts`.
+4. `src/layouts/BaseLayout.astro` writes the appearance settings as CSS custom properties on `<html>`, and adds the canonical URL, robots meta, and favicons.
+5. `src/styles/global.css` does the layout: fonts, sticky text blocks, footer, and the mobile breakpoint at `1024px`.
+6. After the build, the `noindex-headers` integration in `astro.config.mjs` writes `dist/_headers` with `X-Robots-Tag: noindex` when `PUBLIC_NOINDEX=true`.
 
-## Main Page Types
+### Fallbacks
 
-- Home: `site/templates/home.php`
-  - Renders site-level `mainText` blocks from the Kirby Panel.
-  - Each block gets a minimum height from the site-level `frameHeight` setting.
-  - Main appearance settings are defined in `site/blueprints/site.yml`.
+If Sanity can't be reached, or a field is empty, the build uses `fallbackSiteSettings` in `src/lib/siteSettings.ts` and the images in `public/images/`. Each field falls back separately, so a bad background image doesn't throw away CMS copy. `src/lib/siteSettings.test.mjs` covers this.
 
-- Image page: `site/templates/image.php`
-  - Renders `gallery_images` as a Flickity carousel.
-  - Uses `assets/css/templates/image.css`.
-  - Uses `assets/js/templates/image.js`, which contains the bundled Flickity code.
+The fallback copy is the June 2026 Kirby text (“a central figure…”), not the current published copy (“a leading figure…”). A build that silently falls back will show outdated text. The `cms copy` check in `scripts/verify-preview.mjs` exists to catch that.
 
-- Video page: `site/templates/video.php`
-  - Renders the page's first uploaded video file in a native HTML `<video>` element.
-  - Uses `assets/css/templates/video.css`.
+## Sanity
 
-- Default page: `site/templates/default.php`
-  - Bare fallback template.
+- Studio config: `sanity.config.ts` and `sanity.cli.ts`. Studio app ID `jxttu1qo1entgmzakeh2x575`, deployed with `bun run sanity:deploy`.
+- Schema: `src/sanity/schemaTypes/siteSettings.ts`. A single document, ID `siteSettings`, shown in Studio as **Homepage** (`src/sanity/structure/index.ts`).
+- Fields:
+  - Content: `title`, `mainText[]` (each item holds a Portable Text `content` array), `footerText` (Portable Text).
+  - Appearance: `frameHeight`, desktop/mobile background images, `backgroundPosition`, `bodyTextColor`, `backgroundColor`, `fontSize`, `mobileFontSize`, `blend`, `font`, `fontWeight`.
+- `font` must be a family registered with `@font-face` in `global.css`: `ABCMonumentGrotesk`, `UnicaMedium`, or `Unica`. `fontWeight` (400/500/700) only appears for Monument Grotesk. Production uses Monument Grotesk 500.
+- Generated types are in `sanity.types.ts`. Regenerate them with `bun run sanity:typegen` after schema changes.
+- Content is read at build time with `useCdn: false`. Publishing in Studio fires the `cloudflare-rebuild` webhook, which rebuilds and deploys the site (see "Deployment").
 
-## Site-Wide Settings
+### Portable Text Rendering
 
-The Kirby Panel site blueprint at `site/blueprints/site.yml` defines most editable global settings:
+`portableTextToHtml()` in `src/lib/siteSettings.ts` matches the old Kirby markup:
 
-- Home page text blocks.
-- Minimum paragraph frame height.
-- Footer text.
-- Desktop and mobile background images.
-- Background image position.
-- Body text color.
-- Hover/background color.
-- Desktop and mobile font sizing.
-- Text blend toggle.
+- List items render as `<li><p>…</p></li>`. Press links rely on this.
+- External links get `target="_blank" rel="noreferrer"`.
+- A `\n` span whose `_key` contains `mobile` renders as `<br class="mobile-break">`, which only shows at `1024px` and below. Any other `\n` is a normal `<br>`. The footer depends on this key convention, so keep the keys when editing footer breaks.
 
-Those settings are read in `site/snippets/header.php` and converted to CSS custom properties such as `--body-color`, `--font-size`, and `--background-image`.
+### Scripts
 
-## Local Setup
+- `scripts/upload-background-images.ts` (`bun run sanity:upload-backgrounds`) uploads `public/images/background-*.jpg` to Sanity and sets both image fields.
+- `scripts/migrate-site-settings-pt.ts` (`bun run sanity:migrate-pt`) overwrites the published `siteSettings` copy and appearance with `src/sanity/seed/siteSettings.json`.
 
-Install PHP `8.1`, `8.2`, or `8.3`. Verify with `php -v`.
-
-On macOS with Homebrew, PHP `8.3` is the safest current target for this Kirby core:
-
-```sh
-brew install php@8.3
-```
-
-Then get a local copy of the server content. Ask the developer or server admin for a safe sync of:
-
-```text
-content/
-site/config/.license
-```
-
-Do not commit those paths.
-
-If you also need local Panel login, you need a local-safe copy of `site/accounts/`, or you can create a local-only Panel user after the site boots. Do not commit `site/accounts/`.
-
-Start the local server from the repo root:
-
-```sh
-php -S localhost:8000 kirby/router.php
-```
-
-Open:
-
-```text
-http://localhost:8000
-http://localhost:8000/panel
-```
+**Do not run `sanity:migrate-pt` as-is.** The seed still holds the June copy. Running it would overwrite the live biography, collections, press list, and footer with outdated text. Update the seed from the published document first, or retire the script.
 
 ## Making Changes
 
-Use this rule of thumb:
+- Page text, press links, footer, colors, sizes, font, background images: edit in Studio and publish. The webhook rebuilds the site, and the change is live a few minutes later.
+- Layout, sticky behavior, breakpoints, link styles: `src/styles/global.css`.
+- `<head>`, CSS variables, favicons: `src/layouts/BaseLayout.astro`.
+- Homepage markup: `src/pages/index.astro`.
+- New editable field: add it to the schema, the GROQ query, `RawSettings`/`SiteSettings`/`toSiteSettings`, and the fallback, then run `sanity:typegen` and `sanity:schema-deploy`.
+- New font: add the file to `public/fonts/`, add an `@font-face` in `global.css`, and add it to `registeredFonts` in the schema.
 
-- Global layout, typography, colors, spacing: edit `assets/css/global.css`.
-- Template-specific styling: edit `assets/css/templates/*.css`.
-- Shared `<head>`, CSS variables, analytics, global asset loading: edit `site/snippets/header.php`.
-- Shared footer: edit `site/snippets/footer.php`.
-- Home markup: edit `site/templates/home.php`.
-- Image carousel markup/behavior: edit `site/templates/image.php`, `assets/css/templates/image.css`, or `assets/js/templates/image.js`.
-- Video markup/behavior: edit `site/templates/video.php` or `assets/css/templates/video.css`.
-- Kirby Panel editing fields: edit `site/blueprints/**/*.yml`.
-- Actual page text, uploaded images, image captions, and site settings: edit through the Kirby Panel or files under `content/`, not through the PHP templates.
+`public/fonts/` also holds unused fonts left over from Kirby (Grotesque MT, Recta, Univers, Venus, Gerstner, Lars, Folio) and a `fonts.css` that nothing loads.
 
-Recommended workflow:
+## Deployment
+
+Production is deployed by **Cloudflare Workers Builds**. The `adampendleton` worker is connected to the GitHub repo `studiopendleton/adampendleton`:
+
+- A push or merge to `master` builds the site and deploys it to production.
+- Each build reports back to GitHub as the `Workers Builds: adampendleton` check, which links to the build log in the Cloudflare dashboard.
+- The build command, deploy command, environment variables, and custom domains (`adampendleton.net`, `www`) are all set in the dashboard. None of them are in this repo, and there is no GitHub Actions workflow.
+- Sanity is read during the build, so Sanity changes also trigger a build. The Sanity webhook `cloudflare-rebuild` (dataset `production`, document create/update/delete, drafts excluded, no filter) sends a `POST` to a Workers Builds deploy hook. Publishing in Studio rebuilds and deploys production with no further steps. Check it with `bunx sanity hook list` and `bunx sanity hook logs cloudflare-rebuild`.
+
+Two Workers Static Assets configs serve `dist/`:
+
+| Config | Worker | Deployed by | Use |
+| --- | --- | --- | --- |
+| `wrangler.jsonc` | `adampendleton` | Workers Builds on push to `master` or Sanity publish, or `bun run deploy` by hand | Production |
+| `wrangler.preview.jsonc` | `adampendleton-preview` | `bun run deploy:preview` by hand | `workers.dev` preview built with `PUBLIC_NOINDEX=true` and a production canonical URL |
+
+Rules:
+
+- Production builds must not have `PUBLIC_NOINDEX=true`. For a manual `bun run deploy`, check for a local `.env` first.
+- Canonical URLs always point at `PUBLIC_SITE_URL`, which defaults to `https://adampendleton.net`, so preview hosts never become canonical.
+- `astro preview` ignores `dist/_headers`. Use `bun run worker:preview` (`wrangler dev`) to see real headers locally.
+
+## Verification
+
+`.cursor/skills/verify-adampendleton/` is the runbook for checking a preview build. It builds with noindex, serves it with `wrangler dev --config wrangler.preview.jsonc` on `127.0.0.1:8787`, and runs:
 
 ```sh
-git status
-git pull --ff-only
-git switch -c your-change-name
-php -S localhost:8000 kirby/router.php
+bun run test
+PREVIEW_ORIGIN=http://127.0.0.1:8787 bun run verify:preview
 ```
 
-Make edits, test locally, then:
-
-```sh
-git status
-git diff
-git add path/to/changed-files
-git commit -m "Describe the change"
-git push origin your-change-name
-```
-
-## Deployment Reality
-
-The current README says GitHub is a mirror and that changes are pushed from the server to GitHub via a `post-receive` hook. That means pushing to GitHub probably does not deploy the live site by itself.
-
-To deploy from this machine, choose one clear source of truth:
-
-1. Keep the server as source of truth.
-   - Get SSH access to the droplet.
-   - Add the server's deploy repository as a Git remote.
-   - Push directly to that deploy remote/branch.
-   - The existing server hook deploys the pushed commit.
-
-2. Make GitHub the source of truth.
-   - Change the server hook/process so the droplet pulls from GitHub or is updated by GitHub Actions.
-   - Push local branches to GitHub and deploy from there.
-
-3. Manual fallback.
-   - SSH to the droplet.
-   - Pull or checkout the intended commit in the server repo.
-   - Clear Kirby cache if needed.
-
-Before deploying, confirm with the developer:
-
-- The droplet SSH hostname and username.
-- The path to the live site.
-- The path to the bare/deploy Git repo, if separate.
-- Which branch deploys.
-- Whether the hook deploys automatically on push.
-- Whether GitHub is only a mirror or should become canonical.
-
-## Notes And Risks
-
-- The root `composer.json` still describes Kirby Plainkit with `getkirby/cms:^3.0`, but the vendored `kirby/` directory is Kirby `4.4.1`. Do not run dependency updates until that mismatch is intentionally resolved.
-- `site/config/config.php` has `debug` set to `false`, which is correct for production. For local debugging, use a machine-specific config override rather than committing production debug changes.
-- `site/snippets/header.php` assumes the site has desktop/mobile background image files. A local `content/` copy needs those files or the header can error.
-- `site/snippets/header.php` currently assigns the background image focus to a single variable and uses it for both `--background-focus-x` and `--background-focus-y`. If you rely on per-axis focus in CSS, confirm what `$file->focus()` returns and adjust accordingly.
-- The Google Analytics script loads on local pages too. That may be acceptable for visual testing, but use a local-only config if you want to disable analytics during development. Also note the current `header.php` loads `gtag.js?id=UA-147761494-1` but configures `UA-19147768-1`; confirm which property ID is actually intended before making analytics changes.
+`verify:preview` checks the homepage status, canonical URL, robots meta/header, published copy, press-list markup, two mobile breaks, `robots.txt`, and the 404 page. It writes `artifacts/verify/preview-report.json`, which git ignores. It expects noindex, so it fails against production on purpose.
