@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { imageColumn } from '../lib/overscrollColumn';
 import { canonicalUrl, indexingFromFlag } from '../lib/publicSite';
 import type { SiteSettings } from '../lib/siteSettings';
 
@@ -9,6 +10,10 @@ type Props = {
 };
 
 const { title = 'Adam Pendleton', settings } = Astro.props;
+const overscrollColumns = {
+  desktop: await imageColumn(settings.desktopBackgroundImage),
+  mobile: await imageColumn(settings.mobileBackgroundImage),
+};
 const canonical = canonicalUrl(Astro.url.pathname, import.meta.env.PUBLIC_SITE_URL);
 const noindex = indexingFromFlag(import.meta.env.PUBLIC_NOINDEX) === 'noindex';
 const cssVariables = [
@@ -39,8 +44,57 @@ const cssVariables = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <script id="overscroll-columns" type="application/json" is:inline set:html={JSON.stringify(overscrollColumns)} />
   </head>
   <body>
     <slot />
+    <script>
+      import {
+        edgeColors,
+        overscrollBackground,
+        type BackgroundPosition,
+        type ImageColumn,
+      } from '../lib/overscrollEdge';
+
+      type Payload = {
+        desktop: ImageColumn | null;
+        mobile: ImageColumn | null;
+      };
+
+      function backgroundPosition(): BackgroundPosition {
+        const value = getComputedStyle(document.documentElement)
+          .getPropertyValue('--background-position')
+          .trim();
+        if (value === 'center' || value === 'bottom') return value;
+        return 'top';
+      }
+
+      function paintOverscroll(): void {
+        const node = document.getElementById('overscroll-columns');
+        if (!node?.textContent) return;
+        const payload = JSON.parse(node.textContent) as Payload;
+        const mobile = window.matchMedia('(max-width: 1024px)').matches;
+        const column = mobile ? payload.mobile : payload.desktop;
+        const box = document.body.getBoundingClientRect();
+        if (!column || column.samples.length === 0 || box.width < 1 || box.height < 1) return;
+        const edges = edgeColors(column, { width: box.width, height: box.height }, backgroundPosition());
+        const background = overscrollBackground(edges.top, edges.bottom);
+        const root = document.documentElement;
+        root.style.backgroundColor = background.backgroundColor;
+        root.style.backgroundImage = background.backgroundImage;
+        root.style.backgroundRepeat = background.backgroundRepeat;
+        const existing = document.querySelector('meta[name="theme-color"]');
+        const meta = existing instanceof HTMLMetaElement ? existing : document.createElement('meta');
+        if (!existing) {
+          meta.name = 'theme-color';
+          document.head.append(meta);
+        }
+        meta.content = edges.top;
+      }
+
+      paintOverscroll();
+      addEventListener('resize', paintOverscroll);
+      new ResizeObserver(paintOverscroll).observe(document.body);
+    </script>
   </body>
 </html>
