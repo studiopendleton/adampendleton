@@ -170,6 +170,12 @@ img {
   padding-bottom: 1.2em;
 }
 
+.home-block:has(> ul)::after {
+  content: "";
+  display: block;
+  height: calc(var(--frame-height, 100) * 0.3 * 1vh);
+}
+
 .home-block li p {
   padding: 0;
 }
