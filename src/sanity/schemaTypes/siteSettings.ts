@@ -1,6 +1,7 @@
 import { CogIcon } from '@sanity/icons';
 import { defineArrayMember, defineField, defineType } from 'sanity';
 import { imageField } from './shared/imageField';
+import { pressLink } from './pressLink';
 
 const registeredFonts = [
   { title: 'ABC Monument Grotesk', value: 'ABCMonumentGrotesk' },
@@ -62,6 +63,7 @@ export const siteSettings = defineType({
             }),
           },
         }),
+        defineArrayMember({ type: pressLink.name }),
       ],
     }),
     defineField({

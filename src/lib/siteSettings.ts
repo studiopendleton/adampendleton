@@ -1,5 +1,6 @@
 import { toHTML } from '@portabletext/to-html';
 import { backgroundImageUrl } from './image';
+import { isPressLink, pressListHtml, type PressLinkFields } from './pressLinks';
 import { sanityClient } from './sanity';
 import { siteSettingsQuery } from './queries';
 
@@ -56,7 +57,11 @@ const fallbackSiteSettings: SiteSettings = {
 };
 
 type RawTextBlock = {
+  _type?: string | null;
   content?: unknown[] | null;
+  title?: string | null;
+  publication?: string | null;
+  url?: string | null;
 };
 
 type RawSettings = {
@@ -80,13 +85,38 @@ function isRawSettings(value: unknown): value is RawSettings {
   return typeof value === 'object' && value !== null;
 }
 
+function homeBlocksFromMainText(mainText: RawTextBlock[]): HomeTextBlock[] {
+  const blocks: HomeTextBlock[] = [];
+  let pressRun: PressLinkFields[] = [];
+
+  const flushPressRun = () => {
+    if (pressRun.length === 0) return;
+    blocks.push({ html: pressListHtml(pressRun) });
+    pressRun = [];
+  };
+
+  for (const block of mainText) {
+    if (isPressLink(block)) {
+      pressRun.push({
+        title: block.title,
+        publication: block.publication,
+        url: block.url,
+      });
+      continue;
+    }
+    flushPressRun();
+    const html = portableTextToHtml(block.content);
+    if (html.length > 0) blocks.push({ html });
+  }
+
+  flushPressRun();
+  return blocks;
+}
+
 export function toSiteSettings(settings: unknown): SiteSettings {
   if (!isRawSettings(settings)) return fallbackSiteSettings;
 
-  const mainText =
-    settings.mainText
-      ?.map((block) => ({ html: portableTextToHtml(block.content) }))
-      .filter((block) => block.html.length > 0) ?? [];
+  const mainText = homeBlocksFromMainText(settings.mainText ?? []);
 
   const footerFromPt = portableTextToHtml(settings.footerText);
 

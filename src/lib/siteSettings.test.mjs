@@ -8,6 +8,7 @@ const server = await createServer({
   logLevel: 'error',
 });
 const { toSiteSettings } = await server.ssrLoadModule('/src/lib/siteSettings.ts');
+const { migrateMainText } = await server.ssrLoadModule('/src/lib/pressLinks.ts');
 
 after(async () => {
   await server.close();
@@ -44,6 +45,22 @@ const cmsText = {
     },
   ],
 };
+
+function pressItem(key, mark, href, title, publication) {
+  return {
+    _type: 'block',
+    _key: key,
+    style: 'normal',
+    listItem: 'bullet',
+    level: 1,
+    markDefs: [{ _key: mark, _type: 'link', href }],
+    children: [
+      { _type: 'span', _key: `${key}a`, marks: [mark], text: title },
+      { _type: 'span', _key: `${key}b`, marks: [mark, 'em'], text: publication },
+      { _type: 'span', _key: `${key}c`, marks: [mark], text: '→' },
+    ],
+  };
+}
 
 describe('toSiteSettings', () => {
   it('keeps CMS copy when a background image cannot be resolved', () => {
@@ -121,6 +138,60 @@ describe('toSiteSettings', () => {
       settings.footerHtml,
       /<br class="mobile-break"><br><a href="https:\/\/www.instagram.com\/pendleton.adam\/"/,
     );
+  });
+
+  it('renders reordered press links as the same list', () => {
+    const pressList = {
+      _key: 'presslinks',
+      _type: 'homeTextBlock',
+      content: [
+        pressItem('press2', 'frieze', 'https://www.frieze.com/article/adam-pendleton-celebrates-poetry-wildness-and-black-resistance', '“Adam Pendleton Celebrates Poetry, Wildness, and Black Resistance”\n', 'Frieze '),
+        pressItem('press3', 'nytT', 'https://www.nytimes.com/2024/06/07/t-magazine/adam-pendleton-pace-gallery.html', '“Adam Pendleton Holds Our Attention”\n', 'New York Times T Magazine '),
+        pressItem('press4', 'nytHirsh', 'https://www.nytimes.com/2025/04/24/arts/design/adam-pendleton-hirshhorn-museum.html', '“In the Heart of Washington, Adam Pendleton’s Work Demands Deep Thought”\n', 'New York Times '),
+        pressItem('press1', 'nytQueen', 'https://www.nytimes.com/2026/09/23/arts/design/adam-pendleton-amsterdam-artist.html', '“Adam Pendleton Is Painting the White Cube Black”\n', 'New York Times '),
+      ],
+    };
+    const bio = {
+      _key: 'bio',
+      _type: 'homeTextBlock',
+      content: [
+        {
+          _type: 'block',
+          style: 'normal',
+          children: [{ _type: 'span', text: 'Biography stays put', marks: [] }],
+        },
+      ],
+    };
+    const before = toSiteSettings({ ...cmsText, mainText: [bio, pressList] });
+    const migrated = migrateMainText([bio, pressList]);
+    const after = toSiteSettings({ ...cmsText, mainText: migrated });
+
+    assert.deepEqual(
+      migrated.map((item) => item._key),
+      ['bio', 'press2', 'press3', 'press4', 'press1'],
+    );
+    assert.equal(migrated[1].publication, 'Frieze');
+    assert.equal(migrated[1].url, pressList.content[0].markDefs[0].href);
+    assert.equal(
+      after.mainText.map((block) => block.html).join('\n'),
+      before.mainText.map((block) => block.html).join('\n'),
+    );
+  });
+
+  it('leaves a press block unchanged when an item is missing a url', () => {
+    const block = {
+      _key: 'presslinks',
+      content: [
+        {
+          _type: 'block',
+          _key: 'press2',
+          listItem: 'bullet',
+          children: [{ _type: 'span', text: 'Title\n', marks: [] }],
+        },
+      ],
+    };
+
+    assert.deepEqual(migrateMainText([block]), [block]);
   });
 
   it('uses the static homepage when Sanity has no document', () => {
