@@ -134,6 +134,8 @@ describe('toSiteSettings', () => {
 
     const mobileBreaks = settings.footerHtml.match(/<br class="mobile-break">/g) ?? [];
     assert.equal(mobileBreaks.length, 2);
+    assert.match(settings.footerHtml, /<span class="blend-text">For more information, <\/span>/);
+    assert.match(settings.footerHtml, /<span class="blend-text">\.<\/span>/);
     assert.match(
       settings.footerHtml,
       /<br class="mobile-break"><br><a href="https:\/\/www.instagram.com\/pendleton.adam\/"/,
