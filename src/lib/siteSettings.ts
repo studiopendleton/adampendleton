@@ -114,13 +114,13 @@ function homeBlocksFromMainText(mainText: RawTextBlock[]): HomeTextBlock[] {
 }
 
 export function toSiteSettings(settings: unknown): SiteSettings {
-  if (!isRawSettings(settings)) return fallbackSiteSettings;
+  if (!isRawSettings(settings)) return withBlendText(fallbackSiteSettings);
 
   const mainText = homeBlocksFromMainText(settings.mainText ?? []);
 
   const footerFromPt = portableTextToHtml(settings.footerText);
 
-  return {
+  return withBlendText({
     title: settings.title ?? fallbackSiteSettings.title,
     frameHeight: settings.frameHeight ?? fallbackSiteSettings.frameHeight,
     backgroundPosition:
@@ -141,7 +141,39 @@ export function toSiteSettings(settings: unknown): SiteSettings {
     mobileBackgroundImage:
       backgroundImageUrl(settings.mobileBackgroundImage) ??
       fallbackSiteSettings.mobileBackgroundImage,
+  });
+}
+
+// A hovered link cannot leave a multiplied ancestor. Paragraphs that mix
+// words and links split the words into their own spans so only the ink blends.
+function withBlendText(settings: SiteSettings): SiteSettings {
+  return {
+    ...settings,
+    mainText: settings.mainText.map((block) => ({ html: wrapBlendText(block.html) })),
+    footerHtml: wrapBlendText(settings.footerHtml),
   };
+}
+
+function wrapBlendText(html: string): string {
+  if (!/<a\b/i.test(html)) return html;
+
+  let linkDepth = 0;
+  let out = '';
+  for (const match of html.matchAll(/<[^>]*>|[^<]+/g)) {
+    const part = match[0];
+    if (part.startsWith('<')) {
+      if (/^<a\b/i.test(part)) linkDepth += 1;
+      else if (/^<\/a\b/i.test(part) && linkDepth > 0) linkDepth -= 1;
+      out += part;
+      continue;
+    }
+    if (linkDepth === 0 && part.trim().length > 0) {
+      out += `<span class="blend-text">${part}</span>`;
+    } else {
+      out += part;
+    }
+  }
+  return out;
 }
 
 // A production build that cannot reach Sanity fails, so Cloudflare keeps the

@@ -149,7 +149,6 @@ img {
   position: sticky;
   top: 0;
   margin: var(--margin);
-  mix-blend-mode: var(--blend);
 }
 
 .home-main {
@@ -163,7 +162,6 @@ img {
 
 .home-block {
   min-height: calc(var(--frame-height, 100) * 1vh);
-  mix-blend-mode: var(--blend);
 }
 
 .home-block :is(p, ul) {
@@ -193,7 +191,28 @@ img {
   flex-direction: column;
   justify-content: flex-end;
   padding: var(--margin);
+}
+
+/* Multiply the ink, not the block behind it. A hovered link opts out
+   below, so its box is painted over the photo instead of through it. */
+a,
+.blend-text,
+.home-block > p:not(:has(a)),
+.site-footer p:not(:has(a)) {
   mix-blend-mode: var(--blend);
+}
+
+@media screen and (min-width: 1025px) {
+  a:hover {
+    /* The box stays a solid body-color plate. The glyphs are holes, so the photo shows through the letters. */
+    mix-blend-mode: normal;
+    -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+    -webkit-mask-clip: text, border-box;
+    -webkit-mask-composite: xor;
+    mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+    mask-clip: text, border-box;
+    mask-composite: exclude;
+  }
 }
 
 .site-footer-content {
