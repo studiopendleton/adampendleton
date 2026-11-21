@@ -32,14 +32,11 @@ record(
   'homepage robots meta',
 );
 record('robots header', robotsHeader.toLowerCase().includes('noindex'), robotsHeader || 'missing');
-record(
-  'cms copy',
-  home.body.includes('leading figure'),
-  'homepage uses published copy',
-);
-record('press list', home.body.includes('<li><p><a href="https://www.nytimes.com/'), 'press list markup');
-const mobileBreaks = home.body.match(/<br class="mobile-break">/g) ?? [];
-record('mobile breaks', mobileBreaks.length === 2, `count ${mobileBreaks.length}`);
+record('text block', /<p>[^<]/.test(home.body), 'at least one paragraph of text');
+const pressHrefs = [...home.body.matchAll(/<li[^>]*>(?:(?!<\/li>)[\s\S])*?<a href="([^"]*)"/g)].map((m) => m[1]);
+record('press links', pressHrefs.length > 0, `count ${pressHrefs.length}`);
+const badHrefs = pressHrefs.filter((href) => !/^https?:\/\//.test(href));
+record('press hrefs', badHrefs.length === 0, badHrefs.join(', ') || 'all http(s)');
 
 const robots = await fetchText('/robots.txt');
 record('robots.txt status', robots.response.status === 200, `status ${robots.response.status}`);

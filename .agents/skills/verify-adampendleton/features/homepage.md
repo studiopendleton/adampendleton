@@ -19,13 +19,13 @@ Preconditions:
 - The preview server is healthy at `http://127.0.0.1:8787`.
 - `dist/index.html` was built with `PUBLIC_NOINDEX=true`.
 
-- **Open the homepage.** Request `/`. Run `PREVIEW_ORIGIN=http://127.0.0.1:8787 bun run verify:preview`. The report check `homepage status` is ok and the body contains `leading figure`.
-- **Confirm published copy.** The same report check `cms copy` is ok. The body contains `leading figure`.
-- **Confirm press markup.** The report check `press list` is ok. The body contains `<li><p><a href="https://www.nytimes.com/`.
-- **Confirm the footer.** The report check `mobile breaks` is ok with count 2.
+- **Open the homepage.** Request `/`. Run `PREVIEW_ORIGIN=http://127.0.0.1:8787 bun run verify:preview`. The report check `homepage status` is ok.
+- **Confirm published copy.** The report check `text block` is ok. The body has at least one paragraph with text.
+- **Confirm press markup.** The report checks `press links` and `press hrefs` are ok. Every press link href starts with `http`.
+- **Confirm the footer.** Run `bun run test`. The footer mobile-break cases are covered there, not by `verify:preview`.
 
 ## Gotchas
 
 - A production build fails if Sanity is unreachable, so the preview always serves fetched copy. A dev server falls back to the static copy in `src/lib/siteSettings.ts` instead.
-- `cms copy` matches the published biography. If editors rewrite its opening, update the check in `scripts/verify-preview.mjs`.
-- `bun run test` is the proof for a bad background image. The published homepage does not exercise that branch.
+- The checks are structural, so editing the Sanity copy does not need a script change.
+- `bun run test` is the proof for a bad background image and the footer line breaks. The published homepage does not exercise those branches.

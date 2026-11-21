@@ -82,11 +82,11 @@ Rules:
 
 ## Verification
 
-`.cursor/skills/verify-adampendleton/` is the runbook for checking a preview build. It builds with noindex, serves it with `wrangler dev --config wrangler.preview.jsonc` on `127.0.0.1:8787`, and runs:
+`.agents/skills/verify-adampendleton/SKILL.md` is the runbook for verifying a change. It runs the install, tests, check, and noindex build, then serves the build with `wrangler dev --config wrangler.preview.jsonc` on `127.0.0.1:8787` and runs:
 
 ```sh
 bun run test
 PREVIEW_ORIGIN=http://127.0.0.1:8787 bun run verify:preview
 ```
 
-`verify:preview` checks the homepage status, canonical URL, robots meta/header, published copy, press-list markup, two mobile breaks, `robots.txt`, and the 404 page. It writes `artifacts/verify/preview-report.json`, which git ignores. It expects noindex, so it fails against production on purpose.
+`verify:preview` checks the homepage status, canonical URL, robots meta/header, a text paragraph, press-link markup, `robots.txt`, and the 404 page. It writes `artifacts/verify/preview-report.json`, which git ignores. It expects noindex, so it fails against production on purpose.
