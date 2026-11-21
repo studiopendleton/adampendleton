@@ -60,13 +60,13 @@ Retry the `curl` until it prints `200`. If it stays down, read `artifacts/verify
 
 If port 8787 is already in use, do not kill that process. Check with `lsof -nP -iTCP:8787 -sTCP:LISTEN`, pick a free port, and use it for `--port`, the `curl`, and `PREVIEW_ORIGIN`. Check that `dist/index.html` contains `https://adampendleton.net/` and does not contain `http://localhost`.
 
-**(f) Deployed preview** (only when the owner names a preview URL)
+**(f) PR preview** (after the PR's `Workers Builds: adampendleton` check passes)
 
 ```bash
-PREVIEW_ORIGIN=<workers.dev preview URL> bun run verify:preview
+PREVIEW_ORIGIN=https://<branch-slug>-adampendleton.adampendleton.workers.dev bun run verify:preview
 ```
 
-The `adampendleton-preview` workers.dev URL is not recorded in this repo. Get it from the owner or the deploy output. Skip this step if there is no preview, and say so in the report.
+For example, branch `agents/verify-skill` uses `https://agents-verify-skill-adampendleton.adampendleton.workers.dev`. Preview URLs return a plain `Not found` body for unknown paths, so `missing copy` and `missing canonical host` are expected to fail there. Report them as expected-skip, not pass. Every other check must pass.
 
 **(g) Production smoke check** (read-only, only after an approved production deploy)
 
@@ -75,7 +75,11 @@ curl -sI https://adampendleton.net/
 curl -s https://adampendleton.net/ | grep -io '<link rel="canonical"[^>]*>'
 curl -s https://adampendleton.net/ | grep -io '<meta name="robots"[^>]*>' || echo 'no robots meta'
 curl -sI https://www.adampendleton.net/
+curl -s -o /dev/null -w '%{http_code}\n' https://adampendleton.net/missing-page
+curl -s https://adampendleton.net/missing-page | grep -c 'Page not found'
 ```
+
+Expected: the 404 status line prints `404` and the grep prints `1`.
 
 Expected for the apex: status `200`, no `X-Robots-Tag: noindex` header, no robots meta with `noindex`, and canonical `https://adampendleton.net/`. Report what `www` returns (status and any redirect `location`). Do not change `www` behaviour from this skill.
 
